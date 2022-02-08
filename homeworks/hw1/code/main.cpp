@@ -19,6 +19,8 @@ int main(int argc, char **argv)
     std::vector<int> sortedQueue = myQueue;
     sort(sortedQueue.begin(), sortedQueue.end());
 
+    cout << "here" << endl;
+
     // convert the sorted vector to a linked list
     MyNode *root = vectorToLinkedList(sortedQueue);
 
