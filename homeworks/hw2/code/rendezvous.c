@@ -10,6 +10,8 @@ sem_t s1, s2;
 
 void *child_1(void *arg)
 {
+    sleep(1);
+
     printf("child 1: before\n");
 
     // signal to the other thread that it can finish
