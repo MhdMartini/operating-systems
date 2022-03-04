@@ -4,6 +4,7 @@ Program to read in newline-separated integers from a text file, and store these 
 3- Linked List: one-directional, containing the integers sorted in ascending order.
 
 ### Build:
-    make
+make
+
 ### Run:
     ./main file1.txt
