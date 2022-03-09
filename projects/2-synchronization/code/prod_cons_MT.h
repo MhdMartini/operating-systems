@@ -15,7 +15,7 @@ typedef struct
     pthread_cond_t cvEmpty; // for threads waiting bc buffer is empty
 } MONITOR;
 
-/* structure to hold the input arguments of the producer threads */
+/* structure to hold input arguments to threads callback functions */
 struct ThreadArgs
 {
     int nVals; // number of values to be stored
@@ -24,9 +24,9 @@ struct ThreadArgs
 
 /* helper functions */
 void initMonitor(int buffLen);
-void store(int *writeIdx, int val);
+void store(int val, int prodId);
 void *produce(void *args);
-void load(int *readIdx, int *readVal);
+void load(int consId);
 void *consume(void *args);
 void cleanUp(void);
 

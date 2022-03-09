@@ -24,13 +24,26 @@ void initMonitor(int buffLen)
     pthread_cond_init(&monitor.cvEmpty, NULL);
 }
 
-void store(int *writeIdx, int val)
+void store(int val, int prodId)
 /* store val in the shared monitor structure*/
 {
+    // while buffer is full, release lock and wait to be awaken
+    bool slept = false;
+    while (buffFull)
+    {
+        slept = true;
+        printf("P%d: Blocked due to full buffer\n", prodId);
+        pthread_cond_wait(&monitor.cvFull, &monitor.lock);
+    }
+    if (slept)
+        printf("P%d Done waiting on full buffer\n", prodId);
+
+    // print what you'll do
+    printf("P%d: Writing %d to position %d\n", prodId, val, monitor.end);
+
     // store value at write index, and store the write index in
     // the input pointer
     monitor.buffer[monitor.end] = val;
-    *writeIdx = monitor.end;
 
     // set buffer empty as false
     buffEmpty = false;
@@ -46,52 +59,44 @@ void store(int *writeIdx, int val)
 }
 
 void *produce(void *args)
-/* store n_vals values in the shared monitor structure and
-print which producer store val and where -
-help from:
-stackoverflow.com/questions/13131982/create-thread-passing-arguments*/
+/* store n values in the shared monitor structure
+input is a structure containing the producer ID and
+the number of values to be produced */
 {
     int nVals = ((struct ThreadArgs *)args)->nVals;
     int prodId = ((struct ThreadArgs *)args)->id;
 
-    // printf("\n%d, %d\n", nVals, prodId);
-
-    int writeIdx;
     printf("P%d: Producing %d values\n", prodId, nVals);
 
     for (int i = 0; i < nVals; i++)
     {
         int val = rand() % 11;
-        bool slept = false;
-
         pthread_mutex_lock(&monitor.lock); // acquire the lock
-
-        // while buffer is full, release lock and wait to be awaken
-        while (buffFull)
-        {
-            printf("P%d: Blocked due to full buffer\n", prodId);
-            slept = true;
-            pthread_cond_wait(&monitor.cvFull, &monitor.lock);
-        }
-        if (slept)
-            printf("P%d Done waiting on full buffer\n", prodId);
-
-        store(&writeIdx, val);
-        printf("P%d: Writing %d to position %d\n", prodId, val, writeIdx);
+        store(val, prodId);
         pthread_mutex_unlock(&monitor.lock); // release lock
     }
     printf("P%d: Exiting\n", prodId);
     return 0;
 }
 
-void load(int *readIdx, int *readVal)
+void load(int consId)
 /* load val from the shared monitor structure and store
 the write index and value consumed in the input pointers */
 {
-    // load value at read index
-    *readIdx = monitor.start;
+    // while buffer is empty, release lock and wait to be awaken
+    bool slept = false;
+    while (buffEmpty)
+    {
+        slept = true;
+        printf("C%d Blocked due to empty buffer\n", consId);
+        pthread_cond_wait(&monitor.cvEmpty, &monitor.lock);
+    }
+    if (slept)
+        printf("C%d Done waiting on empty buffer\n", consId);
+
+    // print what you'll do and load
     int val = monitor.buffer[monitor.start];
-    *readVal = val;
+    printf("C%d: Reading %d from position %d\n", consId, val, monitor.start);
 
     // increment read index (circular fashion)
     monitor.start = (monitor.start + 1) % monitor.len;
@@ -105,8 +110,9 @@ the write index and value consumed in the input pointers */
 }
 
 void *consume(void *args)
-/* load n values from the shared monitor structure and
-print which consumer loaded the value and from where */
+/* load n values from the shared monitor structure
+input is a structure containing the consumer ID and
+the number of values to be consumed */
 {
     int nVals = ((struct ThreadArgs *)args)->nVals;
     int consId = ((struct ThreadArgs *)args)->id;
@@ -117,20 +123,7 @@ print which consumer loaded the value and from where */
     for (int i = 0; i < nVals; i++)
     {
         pthread_mutex_lock(&monitor.lock); // acquire the lock
-        // while buffer is empty, release lock and wait to be awaken
-
-        bool slept = false;
-        while (buffEmpty)
-        {
-            printf("C%d Blocked due to empty buffer\n", consId);
-            slept = true;
-            pthread_cond_wait(&monitor.cvEmpty, &monitor.lock);
-        }
-        if (slept)
-            printf("C%d Done waiting on empty buffe\n", consId);
-
-        load(&readIdx, &val);
-        printf("C%d: Reading %d from position %d\n", consId, val, readIdx);
+        load(consId);
         pthread_mutex_unlock(&monitor.lock); // release lock
     }
     printf("C%d: Exiting\n", consId);
