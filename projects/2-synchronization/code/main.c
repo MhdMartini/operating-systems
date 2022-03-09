@@ -45,13 +45,13 @@ int main(int argc, char *argv[])
     // start producers
     for (int i = 0; i < nProd; i++)
     {
-        ThreadArgs *args;
+        struct ThreadArgs *args = (struct ThreadArgs *)malloc(sizeof(struct ThreadArgs));
         args->nVals = nStoresProd;
         args->id = i;
-        printf("\n%d, %d\n", nStoresProd, args->nVals);
-        printf("\n%d, %d\n", i, args->id);
+        // printf("\n%d, %d\n", nStoresProd, args->nVals);
+        // printf("\n%d, %d\n", i, args->id);
 
-        pthread_create(&producers[i], NULL, produce, args);
+        pthread_create(&producers[i], NULL, produce, (void *)args);
         printf("Main: started producer %d\n", i);
     }
 
@@ -63,10 +63,10 @@ int main(int argc, char *argv[])
         if (i == nCons - 1)
             nVals = nLoadsConsLast;
 
-        ThreadArgs *args;
+        struct ThreadArgs *args = (struct ThreadArgs *)malloc(sizeof(struct ThreadArgs));
         args->nVals = nVals;
         args->id = i;
-        pthread_create(&consumers[i], NULL, consume, args);
+        pthread_create(&consumers[i], NULL, consume, (void *)args);
         printf("Main: started consumer %d\n", i);
     }
 

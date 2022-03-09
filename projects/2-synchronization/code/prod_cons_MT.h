@@ -16,11 +16,11 @@ typedef struct
 } MONITOR;
 
 /* structure to hold the input arguments of the producer threads */
-typedef struct
+struct ThreadArgs
 {
     int nVals; // number of values to be stored
     int id;    // thread id
-} ThreadArgs;
+};
 
 /* helper functions */
 void initMonitor(int buffLen);
