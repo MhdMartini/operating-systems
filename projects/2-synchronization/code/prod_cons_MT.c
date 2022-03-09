@@ -51,8 +51,8 @@ print which producer store val and where -
 help from:
 stackoverflow.com/questions/13131982/create-thread-passing-arguments*/
 {
-    int nVals = ((struct ThreadArgs*)args)->nVals;
-    int prodId = ((struct ThreadArgs*)args)->id;
+    int nVals = ((struct ThreadArgs *)args)->nVals;
+    int prodId = ((struct ThreadArgs *)args)->id;
 
     // printf("\n%d, %d\n", nVals, prodId);
 
@@ -65,7 +65,7 @@ stackoverflow.com/questions/13131982/create-thread-passing-arguments*/
         bool slept = false;
 
         pthread_mutex_lock(&monitor.lock); // acquire the lock
-        
+
         // while buffer is full, release lock and wait to be awaken
         while (buffFull)
         {
@@ -108,8 +108,8 @@ void *consume(void *args)
 /* load n values from the shared monitor structure and
 print which consumer loaded the value and from where */
 {
-    int nVals = ((struct ThreadArgs*)args)->nVals;
-    int consId = ((struct ThreadArgs*)args)->id;
+    int nVals = ((struct ThreadArgs *)args)->nVals;
+    int consId = ((struct ThreadArgs *)args)->id;
 
     int readIdx, val;
     printf("C%d: Consuming %d values\n", consId, nVals);
@@ -120,14 +120,14 @@ print which consumer loaded the value and from where */
         // while buffer is empty, release lock and wait to be awaken
 
         bool slept = false;
-        while (buffEmpty) {
+        while (buffEmpty)
+        {
             printf("C%d Blocked due to empty buffer\n", consId);
             slept = true;
             pthread_cond_wait(&monitor.cvEmpty, &monitor.lock);
         }
         if (slept)
             printf("C%d Done waiting on empty buffe\n", consId);
-        
 
         load(&readIdx, &val);
         printf("C%d: Reading %d from position %d\n", consId, val, readIdx);
