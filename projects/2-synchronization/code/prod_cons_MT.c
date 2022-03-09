@@ -80,6 +80,7 @@ stackoverflow.com/questions/13131982/create-thread-passing-arguments*/
         printf("P%d: Writing %d to position %d\n", prodId, val, writeIdx);
         pthread_mutex_unlock(&monitor.lock); // release lock
     }
+    printf("P%d: Exiting\n", prodId);
     return 0;
 }
 
@@ -132,6 +133,7 @@ print which consumer loaded the value and from where */
         printf("C%d: Reading %d from position %d\n", consId, val, readIdx);
         pthread_mutex_unlock(&monitor.lock); // release lock
     }
+    printf("C%d: Exiting\n", consId);
     return 0;
 }
 
