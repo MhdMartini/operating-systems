@@ -47,8 +47,10 @@ int main(int argc, char *argv[])
     {
         ThreadArgs *args;
         args->nVals = nStoresProd;
-        printf("***%d***\n", nStoresProd);
         args->id = i;
+        printf("\n%d, %d\n", nStoresProd, args->nVals);
+        printf("\n%d, %d\n", i, args->id);
+
         pthread_create(&producers[i], NULL, produce, args);
         printf("Main: started producer %d\n", i);
     }
@@ -81,9 +83,10 @@ int main(int argc, char *argv[])
         pthread_join(consumers[i], NULL);
         printf("consumer %d joined\n", i);
     }
+
+    printf("Main: program complete\n");
+
     // Clean up and exit
     cleanUp();
-
-    printf("Main: program completed");
     return 0;
 }

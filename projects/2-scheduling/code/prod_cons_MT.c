@@ -27,9 +27,6 @@ void initMonitor(int buffLen)
 void store(int *writeIdx, int val)
 /* store val in the shared monitor structure*/
 {
-    // acquire the lock
-    pthread_mutex_lock(&monitor.lock);
-
     // while buffer is full, release lock and wait to be awaken
     while (buffFull)
         pthread_cond_wait(&monitor.cvFull, &monitor.lock);
@@ -50,9 +47,6 @@ void store(int *writeIdx, int val)
 
     // signal for a consumer waiting bc buffer was empty
     pthread_cond_signal(&monitor.cvEmpty);
-
-    // release lock
-    pthread_mutex_unlock(&monitor.lock);
 }
 
 void *produce(void *args)
@@ -70,8 +64,10 @@ stackoverflow.com/questions/13131982/create-thread-passing-arguments*/
     for (int i = 0; i < nVals; i++)
     {
         int val = rand() % 11;
+        pthread_mutex_lock(&monitor.lock); // acquire the lock
         store(&writeIdx, val);
         printf("P%d: Writing %d to position %d\n", prodId, val, writeIdx);
+        pthread_mutex_unlock(&monitor.lock); // release lock
     }
     return 0;
 }
@@ -80,9 +76,6 @@ void load(int *readIdx, int *readVal)
 /* load val from the shared monitor structure and store
 the write index and value consumed in the input pointers */
 {
-    // acquire the lock
-    pthread_mutex_lock(&monitor.lock);
-
     // while buffer is empty, release lock and wait to be awaken
     while (buffEmpty)
         pthread_cond_wait(&monitor.cvEmpty, &monitor.lock);
@@ -101,9 +94,6 @@ the write index and value consumed in the input pointers */
     // set buffer full as false and signal for a producer waiting bc buffer was full
     buffFull = false;
     pthread_cond_signal(&monitor.cvFull);
-
-    // release lock
-    pthread_mutex_unlock(&monitor.lock);
 }
 
 void *consume(void *args)
@@ -118,8 +108,10 @@ print which consumer loaded the value and from where */
 
     for (int i = 0; i < nVals; i++)
     {
+        pthread_mutex_lock(&monitor.lock); // acquire the lock
         load(&readIdx, &val);
         printf("C%d: Reading %d from position %d\n", consId, val, readIdx);
+        pthread_mutex_unlock(&monitor.lock); // release lock
     }
     return 0;
 }
