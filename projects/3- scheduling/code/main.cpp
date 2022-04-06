@@ -1,10 +1,19 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdbool.h>
-#include <assert.h>
-#include "ready_que.h"
-
 /*
+requests_simulator
+    - reads and stores all requests from file
+    - sorts the requests according to arrival time as a linked list
+    - step method:
+        returns a slice of the linked list for requests at time t
+
+
+scheduler:
+    - step:
+        * steps the process at hand (if any)
+        * accepts requests at t
+    - accept_requests:
+        *
+
+
 have a (ready queue) which
     - is a linked list:
         * every time step includes the arriving processes
@@ -23,8 +32,19 @@ preemptive:
     if a new process arrives
 */
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+#include <iostream>
+#include <assert.h>
+#include "process.h"
+#include "requests.h"
+#include "ready_que.h"
+
+using namespace std;
+
 int main(int argc, char *argv[])
 {
-    printf("hello world\n");
+    Process p(0, 12, 0, 1);
     return 0;
 }
