@@ -14,4 +14,4 @@
 
     ./main1
     ./main2
-    ./main3 <int n_threads>
+    ./main3 <number of threads>
