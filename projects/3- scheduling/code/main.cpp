@@ -29,16 +29,16 @@ ReadyQue
 #include "process.h"
 #include "requests.h"
 #include "ready_que.h"
+#include "scheduler_ques.h"
 
 using namespace std;
 
 int main(int argc, char *argv[])
 {
     Requests reqQue(argv[1]);
-    ReadyQue readyQue(&reqQue);
-    readyQue.display();
-    readyQue.wait();
-    readyQue.display();
-
+    FCFS fcfs(&reqQue);
+    fcfs.display();
+    fcfs.wait();
+    fcfs.display();
     return 0;
 }
