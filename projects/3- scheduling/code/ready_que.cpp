@@ -9,9 +9,8 @@ using namespace std;
 ReadyQue::ReadyQue(Requests *requests)
 {
     reqQue = requests;
-    head = reqQue->head;
+    head = NULL;
 }
-void ReadyQue::display(void) { head->display(); }
 void ReadyQue::wait(void)
 {
     /* make all processes in ready que wait */
@@ -29,7 +28,23 @@ PNode *ReadyQue::pop(void)
     head = head->next;
     return currPNode;
 }
-void ReadyQue::enque(PNode *pNode) { return; }
+void ReadyQue::enque(PNode *pNode)
+{
+    if (head == NULL)
+    {
+        head = pNodeCopy(pNode);
+        return;
+    }
+
+    PNode *currPNode = head;
+    PNode *lastPNode = NULL;
+    while (currPNode != NULL)
+    {
+        lastPNode = currPNode;
+        currPNode = currPNode->next;
+    }
+    lastPNode->next = pNode;
+}
 void ReadyQue::step(void)
 {
     /* step requests que and enque accordingly. wait */
@@ -37,8 +52,20 @@ void ReadyQue::step(void)
     PNode *currPNode = reqQue->head;
     for (int i = 0; i < rt; i++)
     {
-        enque(currPNode);
+        PNode *currPNodeCopy = pNodeCopy(currPNode);
+        enque(currPNodeCopy);
+
         currPNode = currPNode->next;
     }
     wait();
+}
+void ReadyQue::display(void)
+{
+    /* display all nodes in the queue */
+    PNode *node = head;
+    while (node != NULL)
+    {
+        node->display();
+        node = node->next;
+    }
 }

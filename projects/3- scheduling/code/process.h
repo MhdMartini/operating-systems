@@ -39,5 +39,6 @@ public:
 
 void argsFromRow(int *tb, int *p, int *ta, std::string row);
 PNode *pNodeFromRow(int pid, std::string row);
+PNode *pNodeCopy(PNode *pNode);
 
 #endif

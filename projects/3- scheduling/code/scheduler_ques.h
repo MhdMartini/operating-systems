@@ -5,9 +5,6 @@
 class FCFS : public ReadyQue
 {
     using ReadyQue::ReadyQue;
-
-public:
-    void enque(PNode *pNode);
 };
 
 #endif

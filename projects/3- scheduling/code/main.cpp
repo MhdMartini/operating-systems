@@ -36,9 +36,17 @@ using namespace std;
 int main(int argc, char *argv[])
 {
     Requests reqQue(argv[1]);
+    // ReadyQue fcfs(&reqQue);
     FCFS fcfs(&reqQue);
-    fcfs.display();
-    fcfs.wait();
-    fcfs.display();
+    for (int i = 0; i < 5; i++)
+    {
+        fcfs.step();
+        fcfs.display();
+        cout << endl;
+    }
+
+    // fcfs.display();
+    // fcfs.wait();
+    // fcfs.display();
     return 0;
 }

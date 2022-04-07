@@ -80,3 +80,27 @@ PNode *pNodeFromRow(int pid, std::string row)
     PNode *pNode = new PNode(p);
     return pNode;
 }
+
+Process *pCopy(Process *p)
+{
+    int pid = p->id;
+    int tb = p->tb;
+    int ta = p->ta;
+    int pr = p->pr;
+    int taub = p->taub;
+
+    int tw = p->tw;
+    int tta = p->tta;
+    Process *p2 = new Process(pid, tb, pr, ta);
+    p2->taub = taub;
+    p2->tw = tw;
+    p2->tta = tta;
+    return p2;
+}
+
+PNode *pNodeCopy(PNode *pNode)
+{
+    Process *p2 = pCopy(pNode->p);
+    PNode *pNode2 = new PNode(p2);
+    return pNode2;
+}

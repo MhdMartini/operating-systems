@@ -5,8 +5,3 @@
 #include "scheduler_ques.h"
 
 using namespace std;
-
-void FCFS::enque(PNode *pNode)
-{
-    cout << "here" << endl;
-}

@@ -85,7 +85,6 @@ int Requests::step(void)
     t++;
     return end;
 }
-
 void Requests::display()
 {
     /* display all nodes in the queue */
@@ -98,7 +97,6 @@ void Requests::display()
 
     cout << fileIn << endl;
 }
-
 void Requests::displayT()
 {
     PNode *node = head;
