@@ -1,14 +1,49 @@
 #include <stdio.h>
+#include <iostream>
+#include <stdio.h>
 #include <string.h>
-#include <stdlib.h>
-#include <string.h>
-#include <pthread.h>
+#include <sstream>
+#include "requests.h"
 #include "ready_que.h"
 
 using namespace std;
 
-class ReadyQue
+ReadyQue::ReadyQue(Requests *requests)
 {
-public:
-    char *fileIn; // name of input
-};
+    reqQue = requests;
+    head = reqQue->head;
+}
+void ReadyQue::display(void) { head->display(); }
+void ReadyQue::wait(void)
+{
+    /* make all processes in ready que wait */
+    PNode *currPNode = head;
+    while (currPNode != NULL)
+    {
+        currPNode->p->wait();
+        currPNode = currPNode->next;
+    }
+}
+PNode *ReadyQue::pop(void)
+{
+    /* pop the head and change head to its next */
+    PNode *currPNode = head;
+    head = head->next;
+    return currPNode;
+}
+void ReadyQue::enque(PNode *pNode) { return; }
+void ReadyQue::step(void)
+{
+    /*
+    1- step requests que and enque accordingly
+    2- wait
+    */
+    int rt = reqQue->step();
+    PNode *currPNode = reqQue->head;
+    for (int i = 0; i < rt; i++)
+    {
+        enque(currPNode);
+        currPNode = currPNode->next;
+    }
+    wait();
+}

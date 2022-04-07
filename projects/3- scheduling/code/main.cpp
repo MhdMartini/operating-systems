@@ -1,40 +1,28 @@
 /*
-requests_simulator
+Process
+    - holds process-related information
+    - process helpful functions:
+        * burst
+        * wait
+
+PNode
+    - process node class to hold a process and point to a next process
+    - used by requests que to sort requests by arrival time
+
+Requests
     - reads and stores all requests from file
     - sorts the requests according to arrival time as a linked list
     - step method:
-        returns a slice of the linked list for requests at time t
+        updates the end and len attributes:
+            * end tells us how many requests to read at a give time
+            * len tells us how many requests remain.
 
+ReadyQue
 
-scheduler:
-    - step:
-        * steps the process at hand (if any)
-        * accepts requests at t
-    - accept_requests:
-        *
-
-
-have a (ready queue) which
-    - is a linked list:
-        * every time step includes the arriving processes
-        * program over when no processes remain
-        * it points to the process that should go next
-    - when a condition happens (new process arrives, or quantum time ends),
-    it changes its ordering according to the scheme:
-        * RR - rotates left
-        * others - enqueues the new process according to scheme (FCFS, SJF, etc.)
-    - enqueues the processes according to arrival time.
-    -
-non-preemptive algorithms:
-    when a process leaves the queue, it is gone forever
-preemptive:
-    when a process leaves the queue, the process will be enqueued back in
-    if a new process arrives
 */
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdbool.h>
 #include <iostream>
 #include <string>
 #include <assert.h>
@@ -46,14 +34,11 @@ using namespace std;
 
 int main(int argc, char *argv[])
 {
-    Requests r(argv[1]);
-    int end;
-    for (int i = 0; i < 10; i++)
-    {
-        r.step();
-        r.displayT();
-        cout << endl;
-    }
+    Requests reqQue(argv[1]);
+    ReadyQue readyQue(&reqQue);
+    readyQue.display();
+    readyQue.wait();
+    readyQue.display();
 
     return 0;
 }
