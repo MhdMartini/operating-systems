@@ -9,13 +9,17 @@ private:
     char *fileIn;
     PNode *head = NULL;
     int t = 0;
+    int end = 0;
+    bool done = false;
 
-    void initQue(void); // store requests as sorted linked list
+    void initQue(void);
     void enque(PNode &pNode);
 
 public:
     Requests(char *fileIn);
     void display();
+    void displayT();
+    int step();
 };
 
 #endif

@@ -47,6 +47,15 @@ using namespace std;
 int main(int argc, char *argv[])
 {
     Requests r(argv[1]);
+    int end;
+    for (int i = 0; i < 50; i++)
+    {
+        cout << endl
+             << "step: " << i << endl;
+        r.step();
+        r.displayT();
+    }
+
     // Process p(0, 1, 2, 3);
     // PNode node(&p);
     // node.display();

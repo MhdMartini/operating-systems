@@ -20,7 +20,7 @@ Requests::Requests(char *fileInput)
 {
     fileIn = fileInput;
     initQue();
-    display();
+    // display();
 }
 void Requests::initQue(void)
 {
@@ -63,6 +63,28 @@ void Requests::enque(PNode &pNode)
     if (lastPNode != NULL)
         lastPNode->next = &pNode;
 }
+int Requests::step(void)
+{
+    /* move head to the end, and find the new end */
+    PNode *currPNode = head;
+    for (int i = 0; i < end; i++)
+    {
+        head = currPNode->next;
+        currPNode = head;
+    }
+
+    // count requests from head to t
+    end = 0;
+    while ((currPNode != NULL) && (currPNode->p->ta <= t))
+    {
+        currPNode = currPNode->next;
+        end++;
+    }
+
+    t++;
+    return end;
+}
+
 void Requests::display()
 {
     /* display all nodes in the queue */
@@ -74,4 +96,15 @@ void Requests::display()
     }
 
     cout << fileIn << endl;
+}
+
+void Requests::displayT()
+{
+    PNode *node = head;
+    int myEnd = end;
+    while (myEnd--)
+    {
+        node->display();
+        node = node->next;
+    }
 }
