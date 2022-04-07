@@ -36,6 +36,7 @@ preemptive:
 #include <stdlib.h>
 #include <stdbool.h>
 #include <iostream>
+#include <string>
 #include <assert.h>
 #include "process.h"
 #include "requests.h"
@@ -45,6 +46,9 @@ using namespace std;
 
 int main(int argc, char *argv[])
 {
-    Process p(0, 12, 0, 1);
+    Requests r(argv[1]);
+    // Process p(0, 1, 2, 3);
+    // PNode node(&p);
+    // node.display();
     return 0;
 }
