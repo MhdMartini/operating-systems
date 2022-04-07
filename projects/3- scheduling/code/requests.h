@@ -10,9 +10,11 @@ private:
     PNode *head = NULL;
     int t = 0;
 
+    void initQue(void); // store requests as sorted linked list
+    void enque(PNode &pNode);
+
 public:
     Requests(char *fileIn);
-    void init(void); // store requests as sorted linked list
     void display();
 };
 

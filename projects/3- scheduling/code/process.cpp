@@ -11,12 +11,12 @@ int READY = 0;
 int RUNNING = 1;
 int FINISHED = 2;
 
-Process::Process(int pid, int burstTime, int arrivalTime, int priority)
+Process::Process(int pid, int burstTime, int priority, int arrivalTime)
 {
     id = pid;
     tb = burstTime;
-    ta = arrivalTime;
     pr = priority;
+    ta = arrivalTime;
     taub = tb;
 }
 void Process::wait()
@@ -35,8 +35,8 @@ void Process::display()
 {
     cout << "PID:\t\t" << id << endl;
     cout << "Burst Time:\t" << tb << endl;
-    cout << "Arrival Time:\t" << ta << endl;
     cout << "Priority:\t" << pr << endl;
+    cout << "Arrival Time:\t" << ta << endl;
     cout << "Rem. Burst Time: " << taub << endl;
 }
 
@@ -50,7 +50,7 @@ void PNode::display()
     p->display();
 }
 
-void argsFromRow(int *tb, int *ta, int *pr, std::string row)
+void argsFromRow(int *tb, int *pr, int *ta, std::string row)
 /* get process three integer arguments from space separated row */
 {
     std::stringstream rowStream(row);
@@ -64,8 +64,8 @@ void argsFromRow(int *tb, int *ta, int *pr, std::string row)
         if (idx == 3)
         {
             *tb = args[0];
-            *ta = args[1];
-            *pr = args[2];
+            *pr = args[1];
+            *ta = args[2];
         }
     }
 }
@@ -73,8 +73,8 @@ void argsFromRow(int *tb, int *ta, int *pr, std::string row)
 PNode *pNodeFromRow(int pid, std::string row)
 {
     int tb, ta, pr;
-    argsFromRow(&tb, &ta, &pr, row);
-    Process *p = new Process(pid, tb, ta, pr);
+    argsFromRow(&tb, &pr, &ta, row);
+    Process *p = new Process(pid, tb, pr, ta);
     PNode *pNode = new PNode(p);
     return pNode;
 }

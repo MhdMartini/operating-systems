@@ -9,7 +9,7 @@ extern int FINISHED;
 
 class Process
 {
-private:
+public:
     int id;   // process id
     int tb;   // burst time
     int ta;   // time of arrival
@@ -19,8 +19,7 @@ private:
     int tw = 0;  // waiting time
     int tta = 0; // turnaround time
 
-public:
-    Process(int pid, int burstTime, int arrivalTime, int priority);
+    Process(int pid, int burstTime, int priority, int arrivalTime);
     void display();
     void wait();
     bool burst();
@@ -38,7 +37,7 @@ public:
     void display();
 };
 
-void argsFromRow(int *tb, int *ta, int *p, std::string row);
+void argsFromRow(int *tb, int *p, int *ta, std::string row);
 PNode *pNodeFromRow(int pid, std::string row);
 
 #endif
