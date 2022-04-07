@@ -4,11 +4,10 @@
 
 class ReadyQue
 {
-private:
+public:
     Requests *reqQue = NULL; // requests buffer
     PNode *head = NULL;
 
-public:
     ReadyQue(Requests *requests);
     void display(void);
     void step(void);          // enque requests of t according to scheme, and wait
