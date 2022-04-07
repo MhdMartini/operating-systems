@@ -48,16 +48,12 @@ int main(int argc, char *argv[])
 {
     Requests r(argv[1]);
     int end;
-    for (int i = 0; i < 50; i++)
+    for (int i = 0; i < 10; i++)
     {
-        cout << endl
-             << "step: " << i << endl;
         r.step();
         r.displayT();
+        cout << endl;
     }
 
-    // Process p(0, 1, 2, 3);
-    // PNode node(&p);
-    // node.display();
     return 0;
 }

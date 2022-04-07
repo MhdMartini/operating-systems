@@ -7,19 +7,20 @@ class Requests
 {
 private:
     char *fileIn;
-    PNode *head = NULL;
-    int t = 0;
-    int end = 0;
-    bool done = false;
+    PNode *head = NULL; // head PNode
+    int t = 0;          // keep time
 
-    void initQue(void);
-    void enque(PNode &pNode);
+    void initQue(void);       // create sorted linked list by arrival time
+    void enque(PNode &pNode); // insert PNode to que according to arrival time
 
 public:
+    int len = 0; // number of remaining requests
+    int end = 0; // number of requests to be enqueued by ready que
+
     Requests(char *fileIn);
-    void display();
-    void displayT();
-    int step();
+    void display();  // show all nodes in que
+    void displayT(); // show all nodes available at time t
+    int step();      // move head to end, find and return new end
 };
 
 #endif

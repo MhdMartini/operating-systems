@@ -36,6 +36,7 @@ void Requests::initQue(void)
         PNode *pNode = pNodeFromRow(pid, row);
         enque(*pNode);
         pid++;
+        len++;
     }
 
     myfile.close();
@@ -71,6 +72,7 @@ int Requests::step(void)
     {
         head = currPNode->next;
         currPNode = head;
+        len--;
     }
 
     // count requests from head to t
@@ -80,7 +82,6 @@ int Requests::step(void)
         currPNode = currPNode->next;
         end++;
     }
-
     t++;
     return end;
 }
