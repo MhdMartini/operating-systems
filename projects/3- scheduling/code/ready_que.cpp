@@ -1,8 +1,6 @@
 #include <stdio.h>
 #include <iostream>
 #include <stdio.h>
-#include <string.h>
-#include <sstream>
 #include "requests.h"
 #include "ready_que.h"
 
@@ -34,10 +32,7 @@ PNode *ReadyQue::pop(void)
 void ReadyQue::enque(PNode *pNode) { return; }
 void ReadyQue::step(void)
 {
-    /*
-    1- step requests que and enque accordingly
-    2- wait
-    */
+    /* step requests que and enque accordingly. wait */
     int rt = reqQue->step();
     PNode *currPNode = reqQue->head;
     for (int i = 0; i < rt; i++)
