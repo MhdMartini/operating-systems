@@ -16,6 +16,7 @@ public:
     Scheduler(FCFS *fcfsQue);          // init with FCFS
     bool step(bool preemtive = false); // run one scheduling cycle
     void display();                    // display info about finished que
+    Process *currProcess;              // saves the last serviced process
 };
 
 #endif
