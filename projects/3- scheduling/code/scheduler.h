@@ -5,11 +5,15 @@
 
 class Scheduler
 {
+private:
+    PNode *currNode = NULL;
+
 public:
     ReadyQue *rQ;
     Scheduler(ReadyQue *readyQue);
     Scheduler(FCFS *fcfsQue);
     void simulate();
+    bool step(bool preemtive = false);
 };
 
 #endif

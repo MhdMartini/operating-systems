@@ -14,28 +14,36 @@ Scheduler::Scheduler(FCFS *fcfsQue)
 {
     rQ = fcfsQue;
 }
-void Scheduler::simulate(void)
+bool Scheduler::step(bool preemtive)
 {
-    /*
-    1- step the ready que
-    2- burst node, if null pop it
-    */
+    /* simulate a non-preemtive scheduler with any non-preemtive que.
+    return if everything is done */
 
-    PNode *pNode = NULL;
-    do
+    rQ->step();
+    if (currNode == NULL)
+        currNode = rQ->pop();
+
+    if (currNode == NULL)
     {
-        rQ->step();
-        pNode = rQ->pop();
-        cout << "Loaded Process " << pNode->p->id << endl;
-        bool pDone = false;
-        while (!pDone)
-        {
-            rQ->wait();
-            pDone = pNode->p->burst();
-            rQ->step();
-        }
-        // add to finished que
-        cout << "Done with Process " << pNode->p->id << endl;
-        pNode->display();
-    } while (pNode->next != NULL);
+        /* check of ready que is empty because requests are done or
+        because requests have not arrived yet */
+        if (rQ->reqQue->len == 0)
+            return true;
+        return false;
+    }
+
+    bool pDone = currNode->p->burst();
+    rQ->wait();
+    if (pDone)
+    {
+        // add it to finished que
+        currNode->display();
+        currNode = NULL;
+    }
+    if (preemtive)
+    {
+        rQ->enque(currNode);
+        currNode = NULL;
+    }
+    return false;
 }

@@ -39,13 +39,14 @@ int main(int argc, char *argv[])
     Requests reqQue(argv[1]);
     FCFS fcfs(&reqQue);
     Scheduler sch(&fcfs);
-    sch.simulate();
+    // sch.simulate();
+    bool done = false;
 
-    // for (int i = 0; i < 5; i++)
+    while (!done)
+        done = sch.step();
+    return 0;
+    // for (int i = 0; i < 6; i++)
     // {
-    //     fcfs.step();
-    //     fcfs.display();
-    //     cout << endl;
+    //     sch.step();
     // }
-    // return 0;
 }
