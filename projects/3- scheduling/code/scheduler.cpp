@@ -32,7 +32,7 @@ bool Scheduler::step(bool preemtive)
         currNode->display();
         currNode = NULL;
     }
-    if (preemtive)
+    else if (preemtive)
     {
         rQ->enque(currNode);
         currNode = NULL;
