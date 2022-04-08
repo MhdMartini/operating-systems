@@ -7,7 +7,7 @@ using namespace std;
 
 void FCFS::enque(PNode *pNode)
 {
-    /* enque as FCFS basis */
+    /* FCFS: append to end of list */
     if (head == NULL)
     {
         head = pNodeCopy(pNode);

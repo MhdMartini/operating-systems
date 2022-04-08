@@ -30,23 +30,22 @@ ReadyQue
 #include "requests.h"
 #include "ready_que.h"
 #include "scheduler_ques.h"
+#include "scheduler.h"
 
 using namespace std;
 
 int main(int argc, char *argv[])
 {
     Requests reqQue(argv[1]);
-    // ReadyQue fcfs(&reqQue);
     FCFS fcfs(&reqQue);
-    for (int i = 0; i < 5; i++)
-    {
-        fcfs.step();
-        fcfs.display();
-        cout << endl;
-    }
+    Scheduler sch(&fcfs);
+    sch.simulate();
 
-    // fcfs.display();
-    // fcfs.wait();
-    // fcfs.display();
-    return 0;
+    // for (int i = 0; i < 5; i++)
+    // {
+    //     fcfs.step();
+    //     fcfs.display();
+    //     cout << endl;
+    // }
+    // return 0;
 }

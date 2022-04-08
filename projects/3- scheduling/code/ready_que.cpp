@@ -25,13 +25,15 @@ PNode *ReadyQue::pop(void)
 {
     /* pop the head and change head to its next */
     PNode *currPNode = head;
+    if (currPNode == NULL)
+        return NULL;
     head = head->next;
     return currPNode;
 }
 void ReadyQue::enque(PNode *pNode) { return; }
 void ReadyQue::step(void)
 {
-    /* step requests que and enque accordingly. wait */
+    /* step requests que and enque accordingly */
     int rt = reqQue->step();
     PNode *currPNode = reqQue->head;
     for (int i = 0; i < rt; i++)
@@ -41,7 +43,6 @@ void ReadyQue::step(void)
 
         currPNode = currPNode->next;
     }
-    wait();
 }
 void ReadyQue::display(void)
 {
