@@ -28,23 +28,7 @@ PNode *ReadyQue::pop(void)
     head = head->next;
     return currPNode;
 }
-void ReadyQue::enque(PNode *pNode)
-{
-    if (head == NULL)
-    {
-        head = pNodeCopy(pNode);
-        return;
-    }
-
-    PNode *currPNode = head;
-    PNode *lastPNode = NULL;
-    while (currPNode != NULL)
-    {
-        lastPNode = currPNode;
-        currPNode = currPNode->next;
-    }
-    lastPNode->next = pNode;
-}
+void ReadyQue::enque(PNode *pNode) { return; }
 void ReadyQue::step(void)
 {
     /* step requests que and enque accordingly. wait */
