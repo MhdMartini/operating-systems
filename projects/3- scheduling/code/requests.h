@@ -15,6 +15,7 @@ public:
     int t = 0; // keep time
 
     PNode *head = NULL; // head PNode
+    int nR = 0;         // number of total requests
     int len = 0;        // number of remaining requests
     int end = 0;        // number of requests to be enqueued by ready que
 

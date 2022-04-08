@@ -42,5 +42,6 @@ int main(int argc, char *argv[])
 
     while (!sch.step())
         ;
+    sch.display();
     return 0;
 }

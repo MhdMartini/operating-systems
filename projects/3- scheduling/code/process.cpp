@@ -33,13 +33,8 @@ bool Process::burst()
 
 void Process::display()
 {
-    cout << "PID:\t\t\t" << id << endl;
-    cout << "Burst Time:\t\t" << tb << endl;
-    cout << "Priority:\t\t" << pr << endl;
-    cout << "Arrival Time:\t\t" << ta << endl;
-    cout << "Rem. Burst Time:\t" << taub << endl;
-    cout << "Waiting Time:\t\t" << tw << endl;
-    cout << "Turnaround Time:\t" << tta << endl;
+    /* PID  WT  TT */
+    cout << id << "\t" << tw << "\t" << tta << endl;
 }
 
 PNode::PNode(Process *process)
@@ -48,7 +43,6 @@ PNode::PNode(Process *process)
 }
 void PNode::display()
 {
-    cout << "Wrapper node for process:" << endl;
     p->display();
 }
 

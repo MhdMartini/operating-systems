@@ -36,9 +36,9 @@ void Requests::initQue(void)
         PNode *pNode = pNodeFromRow(pid, row);
         enque(*pNode);
         pid++;
-        len++;
+        nR++;
     }
-
+    len = nR;
     myfile.close();
     return;
 }
