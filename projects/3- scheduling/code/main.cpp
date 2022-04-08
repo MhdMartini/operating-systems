@@ -39,14 +39,8 @@ int main(int argc, char *argv[])
     Requests reqQue(argv[1]);
     FCFS fcfs(&reqQue);
     Scheduler sch(&fcfs);
-    // sch.simulate();
-    bool done = false;
 
-    while (!done)
-        done = sch.step();
+    while (!sch.step())
+        ;
     return 0;
-    // for (int i = 0; i < 6; i++)
-    // {
-    //     sch.step();
-    // }
 }
