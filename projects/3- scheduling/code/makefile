@@ -1,2 +1,2 @@
-main: main.cpp process.cpp requests.cpp ready_que.cpp scheduler_ques.cpp
-	g++ -o main main.cpp process.cpp requests.cpp ready_que.cpp scheduler_ques.cpp
+main: main.cpp process.cpp requests.cpp ready_que.cpp fcfs_que.cpp
+	g++ -o main main.cpp process.cpp requests.cpp ready_que.cpp fcfs_que.cpp

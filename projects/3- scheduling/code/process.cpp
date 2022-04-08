@@ -74,6 +74,7 @@ void argsFromRow(int *tb, int *pr, int *ta, std::string row)
 
 PNode *pNodeFromRow(int pid, std::string row)
 {
+    /* return PNode object from input file row */
     int tb, ta, pr;
     argsFromRow(&tb, &pr, &ta, row);
     Process *p = new Process(pid, tb, pr, ta);
@@ -81,26 +82,10 @@ PNode *pNodeFromRow(int pid, std::string row)
     return pNode;
 }
 
-Process *pCopy(Process *p)
-{
-    int pid = p->id;
-    int tb = p->tb;
-    int ta = p->ta;
-    int pr = p->pr;
-    int taub = p->taub;
-
-    int tw = p->tw;
-    int tta = p->tta;
-    Process *p2 = new Process(pid, tb, pr, ta);
-    p2->taub = taub;
-    p2->tw = tw;
-    p2->tta = tta;
-    return p2;
-}
-
 PNode *pNodeCopy(PNode *pNode)
 {
-    Process *p2 = pCopy(pNode->p);
+    /* copy PNode object */
+    Process *p2 = pNode->p;
     PNode *pNode2 = new PNode(p2);
     return pNode2;
 }
