@@ -6,12 +6,13 @@
 
 using namespace std;
 
-Scheduler::Scheduler(FCFS *fcfsQue)
+Scheduler::Scheduler(FCFS *fcfsQue, bool preemptive)
 {
     rQ = fcfsQue;
     fQ = (Process **)malloc(rQ->reqQue->nR);
+    pre = preemptive;
 }
-bool Scheduler::step(bool preemtive)
+bool Scheduler::step()
 {
     /* burst running node and make others wait - return if done */
     rQ->step();
@@ -34,7 +35,7 @@ bool Scheduler::step(bool preemtive)
         fQ[currProcess->id] = currProcess;
         currNode = NULL;
     }
-    else if (preemtive)
+    else if (pre)
     {
         rQ->enque(currNode);
         currNode = NULL;

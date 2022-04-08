@@ -20,9 +20,9 @@ public:
     int end = 0;        // number of requests to be enqueued by ready que
 
     Requests(char *fileIn);
+    int step();      // move head to end, find and return new end
     void display();  // show all nodes in que
     void displayT(); // show all nodes available at time t
-    int step();      // move head to end, find and return new end
 };
 
 #endif

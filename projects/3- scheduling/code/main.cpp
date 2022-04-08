@@ -31,17 +31,13 @@ ReadyQue
 #include "ready_que.h"
 #include "scheduler_ques.h"
 #include "scheduler.h"
+#include "scheduler_stats.h"
 
 using namespace std;
 
 int main(int argc, char *argv[])
 {
-    Requests reqQue(argv[1]);
-    FCFS fcfs(&reqQue);
-    Scheduler sch(&fcfs);
 
-    while (!sch.step())
-        ;
-    sch.display();
+    simulate(argv[1], argv[2], atoi(argv[3]));
     return 0;
 }

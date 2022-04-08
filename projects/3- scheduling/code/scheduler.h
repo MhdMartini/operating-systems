@@ -11,12 +11,13 @@ private:
     PNode *currNode = NULL; // current running process
 
 public:
-    ReadyQue *rQ;                      // ready queue
-    Process **fQ;                      // finished queue
-    Scheduler(FCFS *fcfsQue);          // init with FCFS
-    bool step(bool preemtive = false); // run one scheduling cycle
-    void display();                    // display info about finished que
-    Process *currProcess;              // saves the last serviced process
+    bool pre;
+    Process *currProcess;                              // saves the last serviced process
+    ReadyQue *rQ;                                      // ready queue
+    Process **fQ;                                      // finished queue
+    Scheduler(FCFS *fcfsQue, bool preemptive = false); // init with FCFS
+    bool step();                                       // run one scheduling cycle
+    void display();                                    // display info about finished que
 };
 
 #endif

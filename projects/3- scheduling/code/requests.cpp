@@ -20,7 +20,6 @@ Requests::Requests(char *fileInput)
 {
     fileIn = fileInput;
     initQue();
-    // display();
 }
 void Requests::initQue(void)
 {
