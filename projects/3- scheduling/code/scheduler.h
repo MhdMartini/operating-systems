@@ -10,10 +10,11 @@ private:
 
 public:
     ReadyQue *rQ;
-    Scheduler(ReadyQue *readyQue);
+    PNode *fQ = NULL;
     Scheduler(FCFS *fcfsQue);
     void simulate();
     bool step(bool preemtive = false);
+    void display();
 };
 
 #endif
