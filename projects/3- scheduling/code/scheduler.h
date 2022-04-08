@@ -9,12 +9,10 @@ private:
     PNode *currNode = NULL;
 
 public:
-    ReadyQue *rQ;
-    PNode *fQ = NULL;
-    Scheduler(FCFS *fcfsQue);
-    void simulate();
+    ReadyQue *rQ;             // ready queue
+    PNode *fQ = NULL;         // finished queue
+    Scheduler(FCFS *fcfsQue); // init with FCFS
     bool step(bool preemtive = false);
-    void display();
 };
 
 #endif
