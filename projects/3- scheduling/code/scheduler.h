@@ -12,10 +12,9 @@ private:
 
 public:
     ReadyQue *rQ;                      // ready queue
-    PNode *fQ = NULL;                  // finished queue
+    Process **fQ;                      // finished queue
     Scheduler(FCFS *fcfsQue);          // init with FCFS
     bool step(bool preemtive = false); // run one scheduling cycle
-    void enque(PNode *pNode);          // add a process node to the finished que
     void display();                    // display info about finished que
 };
 

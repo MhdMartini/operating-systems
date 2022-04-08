@@ -1,12 +1,16 @@
 #include <stdio.h>
 #include <iostream>
-#include <stdio.h>
+#include <stdlib.h>
 #include "scheduler.h"
 #include "ready_que.h"
 
 using namespace std;
 
-Scheduler::Scheduler(FCFS *fcfsQue) { rQ = fcfsQue; }
+Scheduler::Scheduler(FCFS *fcfsQue)
+{
+    rQ = fcfsQue;
+    fQ = (Process **)malloc(rQ->reqQue->nR);
+}
 bool Scheduler::step(bool preemtive)
 {
     /* burst running node and make others wait - return if done */
@@ -29,7 +33,7 @@ bool Scheduler::step(bool preemtive)
     if (pDone)
     {
         // add it to finished que
-        enque(currNode);
+        fQ[currNode->p->id] = currNode->p;
         currNode = NULL;
     }
     else if (preemtive)
@@ -39,31 +43,18 @@ bool Scheduler::step(bool preemtive)
     }
     return false;
 }
-void Scheduler::enque(PNode *pNode)
-{
-    /* detach input node from ready que and add it to finished que */
-    if (fQ == NULL)
-    {
-        fQ = pNode;
-        fQ->next = NULL;
-        return;
-    }
-
-    PNode *currPNode = fQ;
-    PNode *lastPNode = NULL;
-    while (currPNode != NULL)
-    {
-        lastPNode = currPNode;
-        currPNode = currPNode->next;
-    }
-    lastPNode->next = pNode;
-    pNode->next = NULL;
-}
 void Scheduler::display()
 {
-    while (fQ != NULL)
+    cout << "FCFS Summary (WT = wait time, TT = turnaround time):" << endl;
+    float twAve = 0, ttaAve = 0;
+    for (int i = 0; i < rQ->reqQue->nR; i++)
     {
-        fQ->display();
-        fQ = fQ->next;
+        fQ[i]->display();
+        twAve += fQ[i]->tw;
+        ttaAve += fQ[i]->tta;
     }
+    twAve /= rQ->reqQue->nR;
+    ttaAve /= rQ->reqQue->nR;
+
+    cout << "AVG\t" << twAve << "\t" << ttaAve << endl;
 }

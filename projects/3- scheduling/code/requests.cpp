@@ -30,7 +30,7 @@ void Requests::initQue(void)
     myfile.open(fileIn);
 
     std::string row;
-    int pid = 1;
+    int pid = 0;
     while (std::getline(myfile, row))
     {
         PNode *pNode = pNodeFromRow(pid, row);
