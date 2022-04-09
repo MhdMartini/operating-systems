@@ -12,13 +12,12 @@ void simulate(char *fileIn, char *fileOut, int interval)
     Scheduler sch(&fcfs);
 
     ofstream myfile;
-    myfile.open(fileOut);
+    myfile.open(fileOut, ofstream::out | ofstream::app);
     myfile << "***** FCFS Scheduling *****" << endl;
 
     Process *currP = NULL;
     Process *lastP = NULL;
-    int t = 30;
-    bool done = false;
+    int t;
     while (!sch.step())
     {
         t = sch.rQ->reqQue->t - 1;
@@ -61,6 +60,5 @@ void simulate(char *fileIn, char *fileOut, int interval)
     myfile << "t = " << ++t << endl;
     myfile << "CPU: Finishing process " << currP->id << endl;
 
-    cout << "Good bye!" << endl;
     myfile.close();
 }
