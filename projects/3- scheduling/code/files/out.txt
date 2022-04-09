@@ -1,3 +1,4 @@
+***** FCFS Scheduling *****
 t = 0
 CPU: Loading process 0 (CPU burst = 10)
 
@@ -29,7 +30,7 @@ t = 9
 CPU: Running process 0 (remaining CPU burst = 1)
 
 t = 10
-CPU: Finishing process 0 (remaining CPU burst = 0); loading process 1 (CPU burst = 3)
+CPU: Finishing process 0; loading process 1 (CPU burst = 3)
 
 t = 11
 CPU: Running process 1 (remaining CPU burst = 2)
@@ -38,7 +39,7 @@ t = 12
 CPU: Running process 1 (remaining CPU burst = 1)
 
 t = 13
-CPU: Finishing process 1 (remaining CPU burst = 0); loading process 2 (CPU burst = 7)
+CPU: Finishing process 1; loading process 2 (CPU burst = 7)
 
 t = 14
 CPU: Running process 2 (remaining CPU burst = 6)
@@ -59,10 +60,10 @@ t = 19
 CPU: Running process 2 (remaining CPU burst = 1)
 
 t = 20
-CPU: Finishing process 2 (remaining CPU burst = 0); loading process 3 (CPU burst = 1)
+CPU: Finishing process 2; loading process 3 (CPU burst = 1)
 
 t = 21
-CPU: Finishing process 3 (remaining CPU burst = 0); loading process 4 (CPU burst = 5)
+CPU: Finishing process 3; loading process 4 (CPU burst = 5)
 
 t = 22
 CPU: Running process 4 (remaining CPU burst = 4)
@@ -76,3 +77,5 @@ CPU: Running process 4 (remaining CPU burst = 2)
 t = 25
 CPU: Running process 4 (remaining CPU burst = 1)
 
+t = 26
+CPU: Finishing process 4
