@@ -20,6 +20,8 @@ void simulate(char *fileIn, char *fileOut, int interval)
     Process *currP = NULL;
     Process *lastP = NULL;
     int t;
+    string pSeq;
+    int conSwi = 0;
     while (!sch.step())
     {
         t = sch.rQ->reqQue->t - 1;
@@ -31,14 +33,16 @@ void simulate(char *fileIn, char *fileOut, int interval)
             continue;
 
         myfile << "t = " << t << endl;
-        if (lastP != currP)
+        if (lastP != currP) // loading / finishing / preempting
         {
-            if (lastP == NULL)                         // loading / finishing / preempting
-                printLoading(&myfile, currP);          // loading
-            else if (lastP->taub > 0)                  // finishing / preempting
+            if (lastP == NULL) // loading
+                printLoading(&myfile, currP);
+            else if (lastP->taub > 0)
                 printPreemting(&myfile, lastP, currP); // preempting
             else
                 printFinishingLoading(&myfile, currP, lastP); // finishing and loading
+            pSeq += to_string(currP->id) + "-";
+            conSwi++;
         }
         else
             printRunning(&myfile, currP); // running
@@ -54,6 +58,12 @@ void simulate(char *fileIn, char *fileOut, int interval)
 
     // show summary
     sch.display(&myfile);
+
+    myfile << "Process sequence: ";
+    pSeq.pop_back();
+    myfile << pSeq << endl;
+    myfile << "Context switches: " << conSwi;
+    myfile << "\n\n\n";
     myfile.close();
 }
 

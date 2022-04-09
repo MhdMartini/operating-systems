@@ -42,21 +42,6 @@ bool Scheduler::step()
     }
     return false;
 }
-// void Scheduler::display()
-// {
-//     cout << "FCFS Summary (WT = wait time, TT = turnaround time):" << endl;
-//     float twAve = 0, ttaAve = 0;
-//     for (int i = 0; i < rQ->reqQue->nR; i++)
-//     {
-//         fQ[i]->display();
-//         twAve += fQ[i]->tw;
-//         ttaAve += fQ[i]->tta;
-//     }
-//     twAve /= rQ->reqQue->nR;
-//     ttaAve /= rQ->reqQue->nR;
-
-//     cout << "AVG\t" << twAve << "\t" << ttaAve << endl;
-// }
 void Scheduler::display(ofstream *fileOut)
 {
     *fileOut << "*********************************************************\n";
@@ -72,5 +57,6 @@ void Scheduler::display(ofstream *fileOut)
     twAve /= rQ->reqQue->nR;
     ttaAve /= rQ->reqQue->nR;
 
-    *fileOut << "AVG\t\t" << twAve << "\t" << ttaAve << endl;
+    *fileOut << "AVG\t\t" << twAve << "\t" << ttaAve << endl
+             << endl;
 }
