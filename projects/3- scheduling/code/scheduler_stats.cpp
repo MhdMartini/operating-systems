@@ -60,8 +60,9 @@ void simulate(char *fileIn, char *fileOut, int interval)
     printFinishing(&myfile, currP);
     fcfs.display(&myfile);
     myfile << endl;
-    // show summary
 
+    // show summary
+    sch.display(&myfile);
     myfile.close();
 }
 

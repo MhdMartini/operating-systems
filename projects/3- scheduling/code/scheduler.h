@@ -1,5 +1,6 @@
 #ifndef SCHEDULER_H
 #define SCHEDULER_H
+#include <fstream>
 #include "ready_que.h"
 #include "scheduler_ques.h"
 
@@ -17,7 +18,7 @@ public:
     Process **fQ;                                      // finished queue
     Scheduler(FCFS *fcfsQue, bool preemptive = false); // init with FCFS
     bool step();                                       // run one scheduling cycle
-    void display();                                    // display info about finished que
+    void display(std::ofstream *fileOut);              // display info about finished que
 };
 
 #endif

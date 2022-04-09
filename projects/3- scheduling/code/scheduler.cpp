@@ -42,18 +42,35 @@ bool Scheduler::step()
     }
     return false;
 }
-void Scheduler::display()
+// void Scheduler::display()
+// {
+//     cout << "FCFS Summary (WT = wait time, TT = turnaround time):" << endl;
+//     float twAve = 0, ttaAve = 0;
+//     for (int i = 0; i < rQ->reqQue->nR; i++)
+//     {
+//         fQ[i]->display();
+//         twAve += fQ[i]->tw;
+//         ttaAve += fQ[i]->tta;
+//     }
+//     twAve /= rQ->reqQue->nR;
+//     ttaAve /= rQ->reqQue->nR;
+
+//     cout << "AVG\t" << twAve << "\t" << ttaAve << endl;
+// }
+void Scheduler::display(ofstream *fileOut)
 {
-    cout << "FCFS Summary (WT = wait time, TT = turnaround time):" << endl;
+    *fileOut << "*********************************************************\n";
+    *fileOut << "FCFS Summary (WT = wait time, TT = turnaround time):\n\n";
+    *fileOut << "PID\t\tWT\t\tTT" << endl;
     float twAve = 0, ttaAve = 0;
     for (int i = 0; i < rQ->reqQue->nR; i++)
     {
-        fQ[i]->display();
+        fQ[i]->display(fileOut);
         twAve += fQ[i]->tw;
         ttaAve += fQ[i]->tta;
     }
     twAve /= rQ->reqQue->nR;
     ttaAve /= rQ->reqQue->nR;
 
-    cout << "AVG\t" << twAve << "\t" << ttaAve << endl;
+    *fileOut << "AVG\t\t" << twAve << "\t" << ttaAve << endl;
 }

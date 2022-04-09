@@ -31,20 +31,13 @@ bool Process::burst()
     return (taub == 0);
 }
 
-void Process::display()
+void Process::display(ofstream *fileOut)
 {
     /* PID  WT  TT */
-    cout << id << "\t" << tw << "\t" << tta << endl;
+    *fileOut << " " << id << "\t\t" << tw << "\t\t" << tta << endl;
 }
 
-PNode::PNode(Process *process)
-{
-    p = process;
-}
-void PNode::display()
-{
-    p->display();
-}
+PNode::PNode(Process *process) { p = process; }
 
 void argsFromRow(int *tb, int *pr, int *ta, std::string row)
 /* get process three integer arguments from space separated row */

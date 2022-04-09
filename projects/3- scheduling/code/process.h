@@ -2,6 +2,7 @@
 #define PROCESS_H
 
 #include <string>
+#include <fstream>
 
 extern int READY;
 extern int RUNNING;
@@ -20,9 +21,9 @@ public:
     int tta = 0; // turnaround time
 
     Process(int pid, int burstTime, int priority, int arrivalTime);
-    void display();
     void wait();
     bool burst();
+    void display(std::ofstream *fileOut);
 };
 
 class PNode
@@ -34,7 +35,6 @@ public:
     PNode *next = NULL;
 
     PNode(Process *process);
-    void display();
 };
 
 void argsFromRow(int *tb, int *p, int *ta, std::string row);
