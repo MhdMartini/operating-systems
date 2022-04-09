@@ -33,24 +33,15 @@ void simulate(char *fileIn, char *fileOut, int interval)
         myfile << "t = " << t << endl;
         if (lastP != currP)
         {
-            // loading / finishing / preempting
-            if (lastP == NULL)
-                // loading
-                printLoading(&myfile, currP);
+            if (lastP == NULL)                         // loading / finishing / preempting
+                printLoading(&myfile, currP);          // loading
+            else if (lastP->taub > 0)                  // finishing / preempting
+                printPreemting(&myfile, lastP, currP); // preempting
             else
-            {
-                // finishing / preempting
-                if (lastP->taub > 0)
-                    // preempting
-                    printPreemting(&myfile, lastP, currP);
-                else
-                    // finishing and loading
-                    printFinishingLoading(&myfile, currP, lastP);
-            }
+                printFinishingLoading(&myfile, currP, lastP); // finishing and loading
         }
         else
-            // running
-            printRunning(&myfile, currP);
+            printRunning(&myfile, currP); // running
 
         // display ready que
         fcfs.display(&myfile);
