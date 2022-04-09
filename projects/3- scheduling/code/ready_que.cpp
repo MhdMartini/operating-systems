@@ -7,10 +7,11 @@
 
 using namespace std;
 
-ReadyQue::ReadyQue(Requests *requests)
+ReadyQue::ReadyQue(Requests *requests, const string name)
 {
     reqQue = requests;
     head = NULL;
+    NAME = name;
 }
 void ReadyQue::wait(void)
 {

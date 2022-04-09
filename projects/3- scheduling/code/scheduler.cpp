@@ -45,7 +45,7 @@ bool Scheduler::step()
 void Scheduler::display(ofstream *fileOut)
 {
     *fileOut << "*********************************************************\n";
-    *fileOut << "FCFS Summary (WT = wait time, TT = turnaround time):\n\n";
+    *fileOut << rQ->NAME << " Summary (WT = wait time, TT = turnaround time):\n\n";
     *fileOut << "PID\t\tWT\t\tTT" << endl;
     float twAve = 0, ttaAve = 0;
     for (int i = 0; i < rQ->reqQue->nR; i++)

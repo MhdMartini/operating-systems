@@ -10,12 +10,12 @@ using namespace std;
 void simulate(char *fileIn, char *fileOut, int interval)
 {
     Requests reqQue(fileIn);
-    FCFS fcfs(&reqQue);
+    FCFS fcfs(&reqQue, "FCFS");
     Scheduler sch(&fcfs);
 
     ofstream myfile;
     myfile.open(fileOut, ofstream::out | ofstream::app);
-    myfile << "***** FCFS Scheduling *****" << endl;
+    myfile << "***** " << sch.rQ->NAME << " Scheduling *****" << endl;
 
     Process *currP = NULL;
     Process *lastP = NULL;
