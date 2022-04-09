@@ -41,10 +41,14 @@ int main(int argc, char *argv[])
     char *fileOut = argv[2];
     int interval = atoi(argv[3]);
 
-    Requests reqQue(fileIn);
-    FCFS fcfs(&reqQue, "FCFS");
-    Scheduler sch(&fcfs);
+    // Requests reqQue(fileIn);
+    // FCFS fcfs(&reqQue, "FCFS");
+    // Scheduler sch(&fcfs);
+    // simulate(&sch, fileOut, interval);
 
+    Requests reqQue(fileIn);
+    SJF sjf(&reqQue, "SJF");
+    Scheduler sch(&sjf);
     simulate(&sch, fileOut, interval);
     return 0;
 }

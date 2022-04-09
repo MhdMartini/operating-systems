@@ -84,25 +84,3 @@ int Requests::step(void)
     t++;
     return end;
 }
-// void Requests::display()
-// {
-//     /* display all nodes in the queue */
-//     PNode *node = head;
-//     while (node != NULL)
-//     {
-//         node->p->display();
-//         node = node->next;
-//     }
-
-//     cout << fileIn << endl;
-// }
-// void Requests::displayT()
-// {
-//     PNode *node = head;
-//     int myEnd = end;
-//     while (myEnd--)
-//     {
-//         node->display();
-//         node = node->next;
-//     }
-// }

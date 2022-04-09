@@ -12,6 +12,12 @@ Scheduler::Scheduler(FCFS *fcfsQue, bool preemptive)
     fQ = (Process **)malloc(rQ->reqQue->nR);
     pre = preemptive;
 }
+Scheduler::Scheduler(SJF *sjfQue, bool preemptive)
+{
+    rQ = sjfQue;
+    fQ = (Process **)malloc(rQ->reqQue->nR);
+    pre = preemptive;
+}
 bool Scheduler::step()
 {
     /* burst running node and make others wait - return if done */

@@ -17,6 +17,7 @@ public:
     ReadyQue *rQ;                                      // ready queue
     Process **fQ;                                      // finished queue
     Scheduler(FCFS *fcfsQue, bool preemptive = false); // init with FCFS
+    Scheduler(SJF *sjfQue, bool preemptive = false);   // init with SJF or STCF
     bool step();                                       // run one scheduling cycle
     void display(std::ofstream *fileOut);              // display info about finished que
 };

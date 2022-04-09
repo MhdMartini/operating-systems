@@ -9,4 +9,10 @@ class FCFS : public ReadyQue
     void enque(PNode *pNode);
 };
 
+class SJF : public ReadyQue
+{
+    using ReadyQue::ReadyQue;
+    void enque(PNode *pNode);
+};
+
 #endif
