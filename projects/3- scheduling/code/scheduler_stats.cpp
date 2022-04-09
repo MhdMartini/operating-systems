@@ -2,7 +2,9 @@
 #include <iostream>
 #include <stdlib.h>
 #include "scheduler.h"
+#include "scheduler_stats.h"
 #include <fstream>
+
 using namespace std;
 
 void simulate(char *fileIn, char *fileOut, int interval)
@@ -34,31 +36,49 @@ void simulate(char *fileIn, char *fileOut, int interval)
             // loading / finishing / preempting
             if (lastP == NULL)
                 // loading
-                myfile << "CPU: Loading process " << currP->id << " (CPU burst = " << currP->tb << ")" << endl;
+                printLoading(&myfile, currP);
             else
             {
                 // finishing / preempting
                 if (lastP->taub > 0)
-                {
                     // preempting
-                    myfile << "CPU: Preempting process " << lastP->id << " (remaining CPU burst = " << lastP->taub << "); ";
-                    myfile << "loading process " << currP->id << " (CPU burst = " << currP->tb << ")" << endl;
-                }
+                    printPreemting(&myfile, lastP, currP);
                 else
-                {
                     // finishing and loading
-                    myfile << "CPU: Finishing process " << lastP->id << "; ";
-                    myfile << "loading process " << currP->id << " (CPU burst = " << currP->tb << ")" << endl;
-                }
+                    printFinishingLoading(&myfile, currP, lastP);
             }
         }
         else
             // running
-            myfile << "CPU: Running process " << currP->id << " (remaining CPU burst = " << currP->taub + 1 << ")" << endl;
+            printRunning(&myfile, currP);
+
         myfile << endl;
     }
     myfile << "t = " << ++t << endl;
-    myfile << "CPU: Finishing process " << currP->id << endl;
+    printFinishing(&myfile, currP);
 
     myfile.close();
+}
+
+void printLoading(ofstream *myfile, Process *p)
+{
+    *myfile << "CPU: Loading process " << p->id << " (CPU burst = " << p->tb << ")" << endl;
+}
+void printPreemting(ofstream *myfile, Process *pIn, Process *pOut)
+{
+    *myfile << "CPU: Preempting process " << pOut->id << " (remaining CPU burst = " << pOut->taub << "); ";
+    *myfile << "loading process " << pIn->id << " (CPU burst = " << pIn->tb << ")" << endl;
+}
+void printFinishingLoading(ofstream *myfile, Process *pIn, Process *pOut)
+{
+    *myfile << "CPU: Finishing process " << pOut->id << "; ";
+    *myfile << "loading process " << pIn->id << " (CPU burst = " << pIn->tb << ")" << endl;
+}
+void printRunning(ofstream *myfile, Process *p)
+{
+    *myfile << "CPU: Running process " << p->id << " (remaining CPU burst = " << p->taub + 1 << ")" << endl;
+}
+void printFinishing(ofstream *myfile, Process *p)
+{
+    *myfile << "CPU: Finishing process " << p->id << endl;
 }
