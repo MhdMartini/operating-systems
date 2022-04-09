@@ -52,10 +52,13 @@ void simulate(char *fileIn, char *fileOut, int interval)
             // running
             printRunning(&myfile, currP);
 
+        // display ready que
         myfile << endl;
     }
     myfile << "t = " << ++t << endl;
     printFinishing(&myfile, currP);
+    myfile << endl;
+    // show summary
 
     myfile.close();
 }
