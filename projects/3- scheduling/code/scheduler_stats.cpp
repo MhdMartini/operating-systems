@@ -53,35 +53,37 @@ void simulate(char *fileIn, char *fileOut, int interval)
             printRunning(&myfile, currP);
 
         // display ready que
+        fcfs.display(&myfile);
         myfile << endl;
     }
     myfile << "t = " << ++t << endl;
     printFinishing(&myfile, currP);
+    fcfs.display(&myfile);
     myfile << endl;
     // show summary
 
     myfile.close();
 }
 
-void printLoading(ofstream *myfile, Process *p)
+void printLoading(ofstream *fileOut, Process *p)
 {
-    *myfile << "CPU: Loading process " << p->id << " (CPU burst = " << p->tb << ")" << endl;
+    *fileOut << "CPU: Loading process " << p->id << " (CPU burst = " << p->tb << ")" << endl;
 }
-void printPreemting(ofstream *myfile, Process *pIn, Process *pOut)
+void printPreemting(ofstream *fileOut, Process *pIn, Process *pOut)
 {
-    *myfile << "CPU: Preempting process " << pOut->id << " (remaining CPU burst = " << pOut->taub << "); ";
-    *myfile << "loading process " << pIn->id << " (CPU burst = " << pIn->tb << ")" << endl;
+    *fileOut << "CPU: Preempting process " << pOut->id << " (remaining CPU burst = " << pOut->taub << "); ";
+    *fileOut << "loading process " << pIn->id << " (CPU burst = " << pIn->tb << ")" << endl;
 }
-void printFinishingLoading(ofstream *myfile, Process *pIn, Process *pOut)
+void printFinishingLoading(ofstream *fileOut, Process *pIn, Process *pOut)
 {
-    *myfile << "CPU: Finishing process " << pOut->id << "; ";
-    *myfile << "loading process " << pIn->id << " (CPU burst = " << pIn->tb << ")" << endl;
+    *fileOut << "CPU: Finishing process " << pOut->id << "; ";
+    *fileOut << "loading process " << pIn->id << " (CPU burst = " << pIn->tb << ")" << endl;
 }
-void printRunning(ofstream *myfile, Process *p)
+void printRunning(ofstream *fileOut, Process *p)
 {
-    *myfile << "CPU: Running process " << p->id << " (remaining CPU burst = " << p->taub + 1 << ")" << endl;
+    *fileOut << "CPU: Running process " << p->id << " (remaining CPU burst = " << p->taub + 1 << ")" << endl;
 }
-void printFinishing(ofstream *myfile, Process *p)
+void printFinishing(ofstream *fileOut, Process *p)
 {
-    *myfile << "CPU: Finishing process " << p->id << endl;
+    *fileOut << "CPU: Finishing process " << p->id << endl;
 }

@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <iostream>
 #include <stdio.h>
+#include <fstream>
 #include "requests.h"
 #include "ready_que.h"
 
@@ -44,13 +45,24 @@ void ReadyQue::step(void)
         currPNode = currPNode->next;
     }
 }
-void ReadyQue::display(void)
+void ReadyQue::display(ofstream *fileOut)
 {
     /* display all nodes in the queue */
+    *fileOut << "Ready queue: ";
+    if (head == NULL)
+    {
+        *fileOut << "empty" << endl;
+        return;
+    }
+
     PNode *node = head;
     while (node != NULL)
     {
-        node->display();
+        *fileOut << node->p->id;
+        if (node->next == NULL)
+            *fileOut << endl;
+        else
+            *fileOut << "-";
         node = node->next;
     }
 }

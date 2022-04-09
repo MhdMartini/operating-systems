@@ -13,7 +13,7 @@ public:
     virtual void enque(PNode *pNode); // enque according to scheme
     PNode *pop(void);                 // pop a process to burst it
     void wait(void);                  // make all processes wait
-    void display(void);
+    void display(std::ofstream *fileOut);
 };
 
 #endif
