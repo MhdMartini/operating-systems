@@ -37,7 +37,14 @@ using namespace std;
 
 int main(int argc, char *argv[])
 {
+    char *fileIn = argv[1];
+    char *fileOut = argv[2];
+    int interval = atoi(argv[3]);
 
-    simulate(argv[1], argv[2], atoi(argv[3]));
+    Requests reqQue(fileIn);
+    FCFS fcfs(&reqQue, "FCFS");
+    Scheduler sch(&fcfs);
+
+    simulate(&sch, fileOut, interval);
     return 0;
 }

@@ -7,27 +7,24 @@
 
 using namespace std;
 
-void simulate(char *fileIn, char *fileOut, int interval)
+void simulate(Scheduler *sch, char *fileOut, int interval)
 {
-    Requests reqQue(fileIn);
-    FCFS fcfs(&reqQue, "FCFS");
-    Scheduler sch(&fcfs);
 
     ofstream myfile;
     myfile.open(fileOut, ofstream::out | ofstream::app);
-    myfile << "***** " << sch.rQ->NAME << " Scheduling *****" << endl;
+    myfile << "***** " << sch->rQ->NAME << " Scheduling *****" << endl;
 
     Process *currP = NULL;
     Process *lastP = NULL;
     int t;
     string pSeq;
     int conSwi = 0;
-    while (!sch.step())
+    while (!sch->step())
     {
-        t = sch.rQ->reqQue->t - 1;
+        t = sch->rQ->reqQue->t - 1;
 
         lastP = currP;
-        currP = sch.currProcess;
+        currP = sch->currProcess;
 
         if (t % interval)
             continue;
@@ -48,16 +45,16 @@ void simulate(char *fileIn, char *fileOut, int interval)
             printRunning(&myfile, currP); // running
 
         // display ready que
-        fcfs.display(&myfile);
+        sch->rQ->display(&myfile);
         myfile << endl;
     }
     myfile << "t = " << ++t << endl;
     printFinishing(&myfile, currP);
-    fcfs.display(&myfile);
+    sch->rQ->display(&myfile);
     myfile << endl;
 
     // show summary
-    sch.display(&myfile);
+    sch->display(&myfile);
 
     myfile << "Process sequence: ";
     pSeq.pop_back();
