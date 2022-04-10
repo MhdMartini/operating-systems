@@ -9,31 +9,34 @@ using namespace std;
 
 class Scheduler
 {
-public:
+private:
     char *fIn;
     char *fOut;
-    int nR = 0;
-    int t = 0;
-    float twAve = 0;  // average waiting time
-    float ttaAve = 0; // average turnaround time
-    int conSwi = 0;   // number of context switches
-    int qua;
-    string proSeq = "Process sequence: "; // process sequence
 
-    deque<Process *> rqQ;
-    deque<Process *> rQ;
-    deque<Process *> fQ;
-    string NAME;
-    string status;
-    Process *runPro = NULL;
+public:
+    int t = 0;                            // time step
+    int nR = 0;                           // number of requests
+    float twAve = 0;                      // average waiting time
+    float ttaAve = 0;                     // average turnaround time
+    int conSwi = 0;                       // number of context switches
+    int qua;                              // quantum time for RR
+    string proSeq = "Process sequence: "; // process sequence string
+
+    deque<Process *> rqQ;   // requests que
+    deque<Process *> rQ;    // ready que
+    deque<Process *> fQ;    // finished que
+    string NAME;            // scheduler name
+    string status;          // scheduler status string
+    Process *runPro = NULL; // running process
 
     Scheduler(char *fileIn, string name, int quantum = 2);
-    void initRqQ();                   // add requests to requests que
-    void loadRQ();                    // load incoming requests to ready que
-    virtual void enqueRQ(Process *p); // add a process to ready que
-    bool load();                      // load a process from rQ
-    virtual bool step();              // load burst and finish
-    void waitRQ();                    // wait process in ready que
+    void initRqQ();                                          // add requests to requests que
+    void loadRQ();                                           // load incoming requests to ready que
+    virtual void enqueRQ(Process *p);                        // add a process to ready que
+    void sortQ(deque<Process *> &Q, int (*func)(Process *)); // sort a queue according to members' attribute
+    bool load();                                             // load a process from rQ
+    virtual bool step();                                     // load burst preempt and finish
+    void waitRQ();                                           // wait processes in ready que
 
     /* methods to update status string */
     void statusTime();
@@ -45,8 +48,8 @@ public:
     void statusRQ();
     void report(ofstream *fileOut);
     void summary(ofstream *fileOut);
-    void sortQ(deque<Process *> &Q, int (*func)(Process *));
-    ~Scheduler();
+
+    ~Scheduler(); // destructor
 };
 class FCFS : public Scheduler
 {
@@ -76,5 +79,5 @@ class RR : public Scheduler
     bool step();
 };
 
-void sortStats(deque<Scheduler *> &stats, int (*att)(Scheduler *));
+void sortStats(deque<Scheduler *> &stats, int (*att)(Scheduler *)); // sort a deque of finished schedulers according to attribute
 #endif
