@@ -40,7 +40,7 @@ int main(int argc, char *argv[])
     Scheduler sch(fileIn, "FCFS");
     ofstream myfile;
     myfile.open(fileOut);
-    myfile << "***** FCFS Scheduling *****\n";
+    myfile << "***** FCFS Scheduling *****\n\n";
     bool done = false;
     int t = 0;
     do
@@ -50,6 +50,7 @@ int main(int argc, char *argv[])
             sch.report(&myfile);
         t++;
     } while (!done);
+    myfile << "\n*********************************************************\n";
     sch.summary(&myfile);
 
     myfile.close();

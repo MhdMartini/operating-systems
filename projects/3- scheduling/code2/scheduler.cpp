@@ -151,7 +151,7 @@ void Scheduler::statusRQ()
     status += "\nReady que: ";
     size_t len = rQ.size();
     if (len == 0)
-        status += "empty\n";
+        status += "empty";
 
     for (int i = 0; i < len; i++)
     {
@@ -161,6 +161,7 @@ void Scheduler::statusRQ()
         else
             status += "-";
     }
+    status += "\n";
 }
 void Scheduler::report(ofstream *myfile)
 {
@@ -168,7 +169,6 @@ void Scheduler::report(ofstream *myfile)
 }
 void Scheduler::summary(ofstream *myfile)
 {
-    *myfile << "*********************************************************\n";
     *myfile << NAME << " Summary (WT = wait time, TT = turnaround time):\n\n";
     *myfile << "PID\t\tWT\t\tTT\n";
     float twAve = 0, ttaAve = 0;
