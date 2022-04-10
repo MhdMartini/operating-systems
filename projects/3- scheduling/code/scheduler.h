@@ -45,11 +45,19 @@ public:
     void sortQ(deque<Process *> &Q, int (*func)(Process *));
     ~Scheduler();
 };
-
+class FCFS : public Scheduler
+{
+    using Scheduler::Scheduler;
+    void enqueRQ(Process *p);
+};
 class SJF : public Scheduler
 {
     using Scheduler::Scheduler;
     void enqueRQ(Process *p);
 };
-
+class Priority : public Scheduler
+{
+    using Scheduler::Scheduler;
+    void enqueRQ(Process *p);
+};
 #endif

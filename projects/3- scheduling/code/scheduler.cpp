@@ -59,10 +59,7 @@ void Scheduler::loadRQ()
             break;
     }
 }
-void Scheduler::enqueRQ(Process *p)
-{
-    rQ.push_back(p);
-}
+void Scheduler::enqueRQ(Process *p) {} // add a process to ready que according to algorithm
 bool Scheduler::step()
 {
     statusTime();

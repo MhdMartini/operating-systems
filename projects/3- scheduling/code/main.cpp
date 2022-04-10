@@ -33,11 +33,14 @@ int main(int argc, char *argv[])
     char *fileOut = argv[2];
     int interval = atoi(argv[3]);
 
-    Scheduler fcfs(fileIn, "FCFS");
+    FCFS fcfs(fileIn, "FCFS");
     simulate(fcfs, fileOut, interval);
 
     SJF sjf(fileIn, "SJF");
     simulate(sjf, fileOut, interval);
+
+    Priority priority(fileIn, "Priority");
+    simulate(priority, fileOut, interval);
 
     return 0;
 }
