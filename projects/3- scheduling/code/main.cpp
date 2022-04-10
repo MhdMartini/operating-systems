@@ -42,13 +42,11 @@ int main(int argc, char *argv[])
     myfile.open(fileOut);
     myfile << "***** FCFS Scheduling *****\n";
     bool done = false;
-    int t = 0;
     do
     {
         done = sch.step();
-        if (!(t % interval))
+        if (!((sch.t - 1) % interval))
             sch.report(&myfile);
-        t++;
     } while (!done);
     sch.summary(&myfile);
 
