@@ -15,5 +15,37 @@ void STCF::enqueRQ(Process *p)
 bool STCF::step()
 {
     // step logic
-    return 1;
+    statusTime();
+    loadRQ();
+    bool done = false;
+    if (runPro != NULL)
+    {
+        if (runPro->burst())
+        {
+            fQ.push_back(runPro);
+            statusFinishing();
+            if (load())
+                done = true;
+            else
+                statusAndLoading();
+        }
+        else if ((!rQ.empty()) && ((rQ.front()->taub < runPro->taub)))
+        {
+            enqueRQ(runPro);
+            statusPreempting();
+            load();
+            statusAndLoading();
+        }
+        else
+            statusRunning();
+    }
+    else
+    {
+        load(); // first iteration
+        statusLoading();
+    }
+    waitRQ();
+    statusRQ();
+    t++;
+    return done;
 }

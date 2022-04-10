@@ -42,5 +42,8 @@ int main(int argc, char *argv[])
     Priority priority(fileIn, "Priority");
     simulate(priority, fileOut, interval);
 
+    STCF stcf(fileIn, "STCF");
+    simulate(stcf, fileOut, interval);
+
     return 0;
 }

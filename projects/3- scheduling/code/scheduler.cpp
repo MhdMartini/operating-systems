@@ -74,7 +74,7 @@ bool Scheduler::step()
             if (load())
                 done = true;
             else
-                statusFinishingLoading();
+                statusAndLoading();
         }
         else
             statusRunning();
@@ -104,6 +104,7 @@ void Scheduler::waitRQ()
     for (auto x : rQ)
         x->wait();
 }
+
 void Scheduler::statusTime()
 {
     status = "t = ";
@@ -125,12 +126,12 @@ void Scheduler::statusFinishing()
     status += "CPU: Finishing process ";
     status += to_string(runPro->id);
 }
-void Scheduler::statusFinishingLoading()
+void Scheduler::statusAndLoading(bool future)
 {
     status += "; loading process ";
     status += to_string(runPro->id);
     status += " (CPU burst = ";
-    status += to_string(runPro->tb);
+    status += to_string(runPro->taub);
     status += ")";
     conSwi++;
     proSeq += to_string(runPro->id) + "-";
@@ -138,6 +139,14 @@ void Scheduler::statusFinishingLoading()
 void Scheduler::statusRunning()
 {
     status += "CPU: Running process ";
+    status += to_string(runPro->id);
+    status += " (remaining CPU burst = ";
+    status += to_string(runPro->taub);
+    status += ")";
+}
+void Scheduler::statusPreempting()
+{
+    status += "CPU: Preemting process ";
     status += to_string(runPro->id);
     status += " (remaining CPU burst = ";
     status += to_string(runPro->taub);

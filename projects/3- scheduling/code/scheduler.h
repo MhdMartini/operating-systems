@@ -35,7 +35,7 @@ public:
     /* methods to update status string */
     void statusTime();
     void statusLoading();
-    void statusFinishingLoading();
+    void statusAndLoading(bool future = false);
     void statusRunning();
     void statusFinishing();
     void statusPreempting();
