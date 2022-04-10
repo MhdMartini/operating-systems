@@ -29,7 +29,7 @@ public:
     void loadRQ();                    // load incoming requests to ready que
     virtual void enqueRQ(Process *p); // add a process to ready que
     bool load();                      // load a process from rQ
-    bool step();                      // load burst and finish
+    virtual bool step();              // load burst and finish
     void waitRQ();                    // wait process in ready que
 
     /* methods to update status string */
@@ -59,5 +59,11 @@ class Priority : public Scheduler
 {
     using Scheduler::Scheduler;
     void enqueRQ(Process *p);
+};
+class STCF : public Scheduler
+{
+    using Scheduler::Scheduler;
+    void enqueRQ(Process *p);
+    bool step();
 };
 #endif
