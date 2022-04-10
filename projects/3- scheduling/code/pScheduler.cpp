@@ -49,3 +49,41 @@ bool STCF::step()
     t++;
     return done;
 }
+
+void RR::enqueRQ(Process *p) { rQ.push_back(p); }
+bool RR::step()
+{
+    statusTime();
+    loadRQ();
+    bool done = false;
+    if (runPro != NULL)
+    {
+        if (runPro->burst())
+        {
+            fQ.push_back(runPro);
+            statusFinishing();
+            if (load())
+                done = true;
+            else
+                statusAndLoading();
+        }
+        else if ((!rQ.empty()) && (!(t % qua)))
+        {
+            enqueRQ(runPro);
+            statusPreempting();
+            load();
+            statusAndLoading();
+        }
+        else
+            statusRunning();
+    }
+    else
+    {
+        load(); // first iteration
+        statusLoading();
+    }
+    waitRQ();
+    statusRQ();
+    t++;
+    return done;
+}

@@ -7,12 +7,13 @@
 
 using namespace std;
 
-Scheduler::Scheduler(char *fileIn, string name)
+Scheduler::Scheduler(char *fileIn, string name, int quantum)
 {
     fIn = fileIn;
     NAME = name;
     initRqQ();
     deque<Process *> fQ(nR);
+    qua = quantum;
 }
 void Scheduler::initRqQ()
 {
@@ -126,7 +127,7 @@ void Scheduler::statusFinishing()
     status += "CPU: Finishing process ";
     status += to_string(runPro->id);
 }
-void Scheduler::statusAndLoading(bool future)
+void Scheduler::statusAndLoading()
 {
     status += "; loading process ";
     status += to_string(runPro->id);
@@ -176,7 +177,7 @@ void Scheduler::summary(ofstream *myfile)
 {
     // sort fQ by arrival time
     sortQ(fQ, [](Process *p) -> int
-          { return (p->ta); });
+          { return (p->id); });
     *myfile << NAME << " Summary (WT = wait time, TT = turnaround time):\n\n";
     *myfile << "PID\t\tWT\t\tTT\n";
     float twAve = 0, ttaAve = 0;

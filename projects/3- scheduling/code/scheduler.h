@@ -14,7 +14,8 @@ public:
     char *fOut;
     int nR = 0;
     int t = 0;
-    int conSwi = 0;                       // number of context switches
+    int conSwi = 0; // number of context switches
+    int qua;
     string proSeq = "Process sequence: "; // process sequence
 
     deque<Process *> rqQ;
@@ -24,7 +25,7 @@ public:
     string status;
     Process *runPro = NULL;
 
-    Scheduler(char *fileIn, string name);
+    Scheduler(char *fileIn, string name, int quantum = 2);
     void initRqQ();                   // add requests to requests que
     void loadRQ();                    // load incoming requests to ready que
     virtual void enqueRQ(Process *p); // add a process to ready que
@@ -35,7 +36,7 @@ public:
     /* methods to update status string */
     void statusTime();
     void statusLoading();
-    void statusAndLoading(bool future = false);
+    void statusAndLoading();
     void statusRunning();
     void statusFinishing();
     void statusPreempting();
@@ -61,6 +62,12 @@ class Priority : public Scheduler
     void enqueRQ(Process *p);
 };
 class STCF : public Scheduler
+{
+    using Scheduler::Scheduler;
+    void enqueRQ(Process *p);
+    bool step();
+};
+class RR : public Scheduler
 {
     using Scheduler::Scheduler;
     void enqueRQ(Process *p);

@@ -32,6 +32,7 @@ int main(int argc, char *argv[])
     char *fileIn = argv[1];
     char *fileOut = argv[2];
     int interval = atoi(argv[3]);
+    int quantum = 2;
 
     FCFS fcfs(fileIn, "FCFS");
     simulate(fcfs, fileOut, interval);
@@ -44,6 +45,9 @@ int main(int argc, char *argv[])
 
     STCF stcf(fileIn, "STCF");
     simulate(stcf, fileOut, interval);
+
+    RR rr(fileIn, "RR", quantum);
+    simulate(rr, fileOut, interval);
 
     return 0;
 }
