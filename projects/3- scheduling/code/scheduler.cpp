@@ -183,7 +183,7 @@ void Scheduler::summary(ofstream *myfile)
     *myfile << "AVG\t\t" << twAve / nR << "\t" << ttaAve / nR << "\n\n";
     proSeq.pop_back();
     *myfile << proSeq << endl;
-    *myfile << "Context switches: " << to_string(conSwi) << endl;
+    *myfile << "Context switches: " << to_string(conSwi) << "\n\n\n";
 }
 void Scheduler::sortQ(deque<Process *> &Q, int (*att)(Process *))
 {

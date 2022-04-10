@@ -3,9 +3,29 @@
 #include <iostream>
 #include <string>
 #include <assert.h>
-#include "simulate.h"
+#include "scheduler.h"
+#include "scheduler.h"
 
 using namespace std;
+
+void simulate(Scheduler &sch, char *fileOut, int interval)
+{
+    ofstream myfile;
+    myfile.open(fileOut, ofstream::out | ofstream::app);
+    myfile << "***** " << sch.NAME << " Scheduling *****\n";
+    bool done = false;
+    int t = 0;
+    do
+    {
+        done = sch.step();
+        if (!(t % interval))
+            sch.report(&myfile);
+        t++;
+    } while (!done);
+    myfile << "\n*********************************************************\n";
+    sch.summary(&myfile);
+    myfile.close();
+}
 
 int main(int argc, char *argv[])
 {
@@ -13,7 +33,11 @@ int main(int argc, char *argv[])
     char *fileOut = argv[2];
     int interval = atoi(argv[3]);
 
-    simulateFCFS(fileIn, fileOut, interval);
+    Scheduler fcfs(fileIn, "FCFS");
+    simulate(fcfs, fileOut, interval);
+
+    SJF sjf(fileIn, "SJF");
+    simulate(sjf, fileOut, interval);
 
     return 0;
 }
