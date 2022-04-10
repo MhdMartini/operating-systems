@@ -61,7 +61,7 @@ void Scheduler::loadRQ()
 }
 void Scheduler::enqueRQ(Process *p)
 {
-    rQ.push_back(rqQ[0]);
+    rQ.push_back(p);
 }
 bool Scheduler::step()
 {
@@ -168,7 +168,7 @@ void Scheduler::report(ofstream *myfile)
 }
 void Scheduler::summary(ofstream *myfile)
 {
-    *myfile << "*********************************************************\n";
+    sortfQ(); // sort fQ by arrival time
     *myfile << NAME << " Summary (WT = wait time, TT = turnaround time):\n\n";
     *myfile << "PID\t\tWT\t\tTT\n";
     float twAve = 0, ttaAve = 0;
@@ -182,4 +182,29 @@ void Scheduler::summary(ofstream *myfile)
     proSeq.pop_back();
     *myfile << proSeq << endl;
     *myfile << "Context switches: " << to_string(conSwi) << endl;
+}
+void Scheduler::sortfQ()
+{
+    // sort ready que by arrival time
+    for (int i = 0; i < fQ.size(); i++)
+    {
+        for (int j = 0; j < fQ.size() - 1; j++)
+        {
+            if (fQ[j]->ta > fQ[j + 1]->ta)
+            {
+                Process *temp = fQ[j];
+                fQ[j] = fQ[j + 1];
+                fQ[j + 1] = temp;
+            }
+        }
+    }
+}
+Scheduler::~Scheduler()
+{
+    for (auto x : rqQ)
+        delete x;
+    for (auto x : rQ)
+        delete x;
+    for (auto x : fQ)
+        delete x;
 }

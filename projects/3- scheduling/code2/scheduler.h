@@ -42,6 +42,8 @@ public:
     void statusRQ();
     void report(ofstream *fileOut);
     void summary(ofstream *fileOut);
+    void sortfQ();
+    ~Scheduler();
 };
 
 #endif

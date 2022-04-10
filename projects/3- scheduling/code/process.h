@@ -19,6 +19,7 @@ public:
 
     int tw = 0;  // waiting time
     int tta = 0; // turnaround time
+    Process *next = NULL;
 
     Process(int pid, int burstTime, int priority, int arrivalTime);
     void wait();
