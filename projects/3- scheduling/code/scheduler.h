@@ -42,7 +42,6 @@ public:
     void statusRQ();
     void report(ofstream *fileOut);
     void summary(ofstream *fileOut);
-    void sortfQ();
     void sortQ(deque<Process *> &Q, int (*func)(Process *));
     ~Scheduler();
 };

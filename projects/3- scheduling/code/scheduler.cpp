@@ -168,7 +168,7 @@ void Scheduler::report(ofstream *myfile)
 }
 void Scheduler::summary(ofstream *myfile)
 {
-    // sortfQ(); // sort fQ by arrival time
+    // sort fQ by arrival time
     sortQ(fQ, [](Process *p) -> int
           { return (p->ta); });
     *myfile << NAME << " Summary (WT = wait time, TT = turnaround time):\n\n";
@@ -184,22 +184,6 @@ void Scheduler::summary(ofstream *myfile)
     proSeq.pop_back();
     *myfile << proSeq << endl;
     *myfile << "Context switches: " << to_string(conSwi) << endl;
-}
-void Scheduler::sortfQ()
-{
-    // sort ready que by arrival time
-    for (int i = 0; i < fQ.size(); i++)
-    {
-        for (int j = 0; j < fQ.size() - 1; j++)
-        {
-            if (fQ[j]->ta > fQ[j + 1]->ta)
-            {
-                Process *temp = fQ[j];
-                fQ[j] = fQ[j + 1];
-                fQ[j + 1] = temp;
-            }
-        }
-    }
 }
 void Scheduler::sortQ(deque<Process *> &Q, int (*att)(Process *))
 {
@@ -217,7 +201,6 @@ void Scheduler::sortQ(deque<Process *> &Q, int (*att)(Process *))
         }
     }
 }
-
 Scheduler::~Scheduler()
 {
     for (auto x : rqQ)
