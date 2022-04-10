@@ -180,14 +180,15 @@ void Scheduler::summary(ofstream *myfile)
           { return (p->id); });
     *myfile << NAME << " Summary (WT = wait time, TT = turnaround time):\n\n";
     *myfile << "PID\t\tWT\t\tTT\n";
-    float twAve = 0, ttaAve = 0;
     for (auto p : fQ)
     {
         *myfile << " " << p->id << "\t\t" << p->tw << "\t\t" << p->tta << endl;
         twAve += p->tw;
         ttaAve += p->tta;
     }
-    *myfile << "AVG\t\t" << twAve / nR << "\t" << ttaAve / nR << "\n\n";
+    twAve /= nR;
+    ttaAve /= nR;
+    *myfile << "AVG\t\t" << twAve << "\t" << ttaAve << "\n\n";
     proSeq.pop_back();
     *myfile << proSeq << endl;
     *myfile << "Context switches: " << to_string(conSwi) << "\n\n\n";
@@ -216,4 +217,21 @@ Scheduler::~Scheduler()
         delete x;
     for (auto x : fQ)
         delete x;
+}
+
+void sortStats(deque<Scheduler *> &stats, int (*att)(Scheduler *))
+{
+    // sort scheds by attribute returned by att
+    for (int i = 0; i < stats.size(); i++)
+    {
+        for (int j = 0; j < stats.size() - 1; j++)
+        {
+            if (att(stats[j]) > att(stats[j + 1]))
+            {
+                Scheduler *temp = stats[j];
+                stats[j] = stats[j + 1];
+                stats[j + 1] = temp;
+            }
+        }
+    }
 }

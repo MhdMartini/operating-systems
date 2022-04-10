@@ -14,7 +14,9 @@ public:
     char *fOut;
     int nR = 0;
     int t = 0;
-    int conSwi = 0; // number of context switches
+    float twAve = 0;  // average waiting time
+    float ttaAve = 0; // average turnaround time
+    int conSwi = 0;   // number of context switches
     int qua;
     string proSeq = "Process sequence: "; // process sequence
 
@@ -73,4 +75,6 @@ class RR : public Scheduler
     void enqueRQ(Process *p);
     bool step();
 };
+
+void sortStats(deque<Scheduler *> &stats, int (*att)(Scheduler *));
 #endif
