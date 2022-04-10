@@ -43,7 +43,14 @@ public:
     void report(ofstream *fileOut);
     void summary(ofstream *fileOut);
     void sortfQ();
+    void sortQ(deque<Process *> &Q, int (*func)(Process *));
     ~Scheduler();
+};
+
+class SJF : public Scheduler
+{
+    using Scheduler::Scheduler;
+    void enqueRQ(Process *p);
 };
 
 #endif

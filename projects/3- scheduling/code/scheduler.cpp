@@ -168,7 +168,9 @@ void Scheduler::report(ofstream *myfile)
 }
 void Scheduler::summary(ofstream *myfile)
 {
-    sortfQ(); // sort fQ by arrival time
+    // sortfQ(); // sort fQ by arrival time
+    sortQ(fQ, [](Process *p) -> int
+          { return (p->ta); });
     *myfile << NAME << " Summary (WT = wait time, TT = turnaround time):\n\n";
     *myfile << "PID\t\tWT\t\tTT\n";
     float twAve = 0, ttaAve = 0;
@@ -199,6 +201,23 @@ void Scheduler::sortfQ()
         }
     }
 }
+void Scheduler::sortQ(deque<Process *> &Q, int (*att)(Process *))
+{
+    // sort Q by attribute returned by att
+    for (int i = 0; i < Q.size(); i++)
+    {
+        for (int j = 0; j < Q.size() - 1; j++)
+        {
+            if (att(Q[j]) > att(Q[j + 1]))
+            {
+                Process *temp = Q[j];
+                Q[j] = Q[j + 1];
+                Q[j + 1] = temp;
+            }
+        }
+    }
+}
+
 Scheduler::~Scheduler()
 {
     for (auto x : rqQ)
