@@ -2,7 +2,8 @@
 #include <iostream>
 #include <iomanip>
 #include "process.h"
-#include "mmu.h"
+
+extern std::mutex lockFile, lockMMU;
 
 Process::Process(MMU *mmu, int id, std::string fileThread, int pSize)
     : mmu(mmu), id(id), fileThread(fileThread), pSize(pSize) {}
@@ -27,6 +28,10 @@ void Process::start()
     fclose(fp);
     statusComplete();
 }
+std::thread Process::getThread()
+{
+    return std::thread(&Process::start, this);
+}
 void Process::senReq(const char OP, int regNum, int vAdd)
 {
     /* send write or read request to MMU. if -1 is received, send same request*/
@@ -41,17 +46,22 @@ void Process::senReq(const char OP, int regNum, int vAdd)
 
 void Process::statusStart()
 {
+    lockFile.lock();
     std::cout << "Process " << id << " started" << std::endl;
+    lockFile.unlock();
 }
 void Process::statusOp(const char OP, int regNum, int vAdd)
 {
     // P0 OPERATION: R r0 0
+    lockFile.lock();
     std::cout << "Process " << id << " "
               << "OPERATION: " << OP << " r" << regNum << " " << vAdd << std::endl;
+    lockFile.unlock();
 }
 void Process::statusReq(const char OP, int regNum, int retVal, int vAdd)
 {
     // print read or write requests
+    lockFile.lock();
     std::cout << "P" << id << ": ";
     if (OP == 'R')
     {
@@ -68,10 +78,13 @@ void Process::statusReq(const char OP, int regNum, int retVal, int vAdd)
                   << " = 0x" << std::setfill('0') << std::setw(8) << std::hex << retVal
                   << " (r" << regNum << ")" << std::endl;
     }
+    lockFile.unlock();
 }
 void Process::statusComplete()
 {
+    lockFile.lock();
     std::cout << "Process " << id << " complete" << std::endl;
+    lockFile.unlock();
 }
 
 Process::~Process() { delete[] regs; }

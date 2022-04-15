@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
+#include <fstream>
 #include "utils.h"
 
 #define INT_SIZE 4
@@ -31,4 +32,51 @@ void write(char *address, int value)
         address[i] = (char)temp;
         value = value >> BYTE_SIZE;
     }
+}
+
+void start_processes(std::vector<Process *> &processes, MMU *mmu)
+{
+    /* give processes their mmu and locks, get their threads,
+    and start and join the threads */
+    std::vector<std::thread> threads;
+    for (int i = 0; i < processes.size(); i++)
+    {
+        processes[i]->mmu = mmu;
+        threads.push_back(processes[i]->getThread());
+    }
+    for (int i = 0; i < threads.size(); i++)
+    {
+        threads[i].join();
+    }
+    for (int i = 0; i < processes.size(); i++)
+    {
+        delete processes[i];
+    }
+    delete mmu;
+}
+
+void run(char *fileName)
+{
+    /* read memory size, page size from file. create processes
+    and read their vMSize to get the disk size.
+    create mmu, pass it to processes and start processes*/
+    std::ifstream infile(fileName);
+    int mSize, pSize, nPro, dSize = 0;
+    infile >> mSize >> pSize >> nPro;
+
+    std::string fileThread;
+    std::vector<Process *> processes;
+    for (int i = 0; i < nPro; i++)
+    {
+        infile >> fileThread;
+        fileThread = fileThread;
+        const char *fileThreadCh = (const char *)fileThread.c_str();
+        Process *p = new Process(i, fileThreadCh, pSize);
+        dSize += p->vMSize;
+        processes.push_back(p);
+    }
+    infile.close();
+
+    MMU *mmu = new MMU(mSize, dSize, pSize);
+    start_processes(processes, mmu);
 }

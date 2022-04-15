@@ -1,6 +1,8 @@
 #ifndef PROCESS_H
 #define PROCESS_H
 #include "mmu.h"
+#include <thread>
+#include <mutex>
 
 class Process
 {
@@ -17,7 +19,8 @@ public:
 
 public:
     void senReq(const char OP, int regNum, int vAdd); // send read and write request to MMU
-    void start();                                     // start
+    void start();                                     // start thread
+    std::thread getThread();                          // ge thread that points to start()
     ~Process();
 
 private:
