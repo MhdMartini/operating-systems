@@ -1,11 +1,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
+#include <thread>
+#include <mutex>
 #include "mmu.h"
 
 #define VALID 0
 #define REFERENCE 1
 #define DIRTY 2
+
+extern std::mutex lockFile, lockMMU;
 
 MMU::MMU(int mSize, int dSize, int pSize)
     : mSize(mSize), dSize(dSize), pSize(pSize) { initMem(); }
@@ -26,11 +30,7 @@ void MMU::initMem()
 int MMU::recReq(const char OP, int id, int vAdd, int val)
 {
     // /* receive read or write request from process */
-    // if (OP == 'R')
-    //     std::cout << "Read ";
-    // else
-    //     std::cout << "Write ";
-    // std::cout << "Request Received from Process " << id << std::endl;
+
     return 25;
 }
 void MMU::display()
