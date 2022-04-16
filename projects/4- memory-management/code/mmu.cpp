@@ -51,6 +51,10 @@ int MMU::recReq(const char OP, int id, int vAdd, int val)
         int offset = getOffset(vAdd);
         int memAdd = fNum * pSize + offset;
 
+        if (!rejected)
+            statusValidTranslation(id, vAdd / pSize, fNum);
+        statusTranslated(id, vAdd, memAdd);
+
         bitTable[pte][REFERENCE] = true;
         if (OP == 'R')
             val = read(memAdd);
@@ -60,11 +64,17 @@ int MMU::recReq(const char OP, int id, int vAdd, int val)
             write(memAdd, val);
         }
         lockAll.unlock();
+        rejected = false;
         return val;
     }
 
+    rejected = true;
+    statusNotResident(id, vAdd / pSize);
+
     // invalid page, look for empty frame
     int fFrame = getFFrame();
+    if (fFrame != -1)
+        statusUsing(id, fFrame);
 
     // if no empty frame, step the clock until frame-to-evict is found
     if (fFrame == -1)
@@ -118,6 +128,7 @@ int MMU::recReq(const char OP, int id, int vAdd, int val)
     clock->enque(id, pNumber, pte);
 
     lockAll.unlock();
+    statusNewTranslation(id, vAdd / pSize, fFrame);
     return -1;
 }
 int MMU::getpNumber(int id, int vAdd) { return vAdd / pSize; }
@@ -150,6 +161,37 @@ int MMU::getFFrame()
         }
     }
     return -1;
+}
+
+void MMU::statusNotResident(int id, int pNum)
+{
+    lockFault.lock();
+    printf("P%d: page %d not resident in memory\n", id, pNum);
+    lockFault.unlock();
+}
+void MMU::statusUsing(int id, int fNumber)
+{
+    lockFault.lock();
+    printf("P%d: using free frame %d\n", id, fNumber);
+    lockFault.unlock();
+}
+void MMU::statusNewTranslation(int id, int pNum, int fNumber)
+{
+    lockFault.lock();
+    printf("P%d: new translation from page %d to frame %d\n", id, pNum, fNumber);
+    lockFault.unlock();
+}
+void MMU::statusTranslated(int id, int vAdd, int memAdd)
+{
+    lockFault.lock();
+    printf("P%d: translated VA 0x%08x to PA 0x%08x\n", id, vAdd, memAdd);
+    lockFault.unlock();
+}
+void MMU::statusValidTranslation(int id, int pNum, int fNumber)
+{
+    lockFault.lock();
+    printf("P%d: valid translation from page %d to frame %d\n", id, pNum, fNumber);
+    lockFault.unlock();
 }
 
 MMU::~MMU()

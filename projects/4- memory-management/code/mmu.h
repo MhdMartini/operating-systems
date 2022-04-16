@@ -27,6 +27,9 @@ public:
     Clock *clock; // clock algorithm
 
 public:
+    bool rejected = false;
+
+public:
     void initMem();
     int recReq(const char OP, int id, int vAdd, int val); // receive read request from processes
     int getpNumber(int id, int vAdd);                     // get page number from virtual address
@@ -36,6 +39,13 @@ public:
     int read(int memAdd);                                 // read four bytes from valid memory address as integer (BE)
     void write(int memAdd, int value);                    // write four bytes integer into valid memory address (BE)
     int getFFrame();                                      // get first free frame
+
+public:
+    void statusNotResident(int id, int pNum);                   // print not resident status
+    void statusUsing(int id, int fNumber);                      // print using frame status
+    void statusNewTranslation(int id, int pNum, int fNumber);   // print new translation status
+    void statusTranslated(int id, int vAdd, int memAdd);        // print translated status
+    void statusValidTranslation(int id, int pNum, int fNumber); // print valid translation status
     ~MMU();
 };
 
