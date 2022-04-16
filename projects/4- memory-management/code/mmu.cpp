@@ -167,39 +167,39 @@ int MMU::getFFrame()
 
 void MMU::statusNotResident(int id, int pNum)
 {
-    lockFault.lock();
+    lockFile.lock();
     printf("P%d: page %d not resident in memory\n", id, pNum);
-    lockFault.unlock();
+    lockFile.unlock();
 }
 void MMU::statusUsing(int id, int fNumber)
 {
-    lockFault.lock();
+    lockFile.lock();
     printf("P%d: using free frame %d\n", id, fNumber);
-    lockFault.unlock();
+    lockFile.unlock();
 }
 void MMU::statusNewTranslation(int id, int pNum, int fNumber)
 {
-    lockFault.lock();
+    lockFile.lock();
     printf("P%d: new translation from page %d to frame %d\n", id, pNum, fNumber);
-    lockFault.unlock();
+    lockFile.unlock();
 }
 void MMU::statusTranslated(int id, int vAdd, int memAdd)
 {
-    lockFault.lock();
+    lockFile.lock();
     printf("P%d: translated VA 0x%08x to PA 0x%08x\n", id, vAdd, memAdd);
-    lockFault.unlock();
+    lockFile.unlock();
 }
 void MMU::statusValidTranslation(int id, int pNum, int fNumber)
 {
-    lockFault.lock();
+    lockFile.lock();
     printf("P%d: valid translation from page %d to frame %d\n", id, pNum, fNumber);
-    lockFault.unlock();
+    lockFile.unlock();
 }
 void MMU::statusEvicting(int id, int idV, int pNum, int fNumber)
 {
-    lockFault.lock();
+    lockFile.lock();
     printf("P%d: evicting process %d, page %d from frame %d\n", id, idV, pNum, fNumber);
-    lockFault.unlock();
+    lockFile.unlock();
 }
 
 MMU::~MMU()
