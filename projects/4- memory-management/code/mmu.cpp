@@ -42,7 +42,7 @@ int MMU::recReq(const char OP, int id, int vAdd, int val)
 {
     lockAll.lock();
     // get pte for requested address
-    int pNumber = getpNumber(id, vAdd);
+    int pNumber = getpNum(id, vAdd);
     int pte = getPTE(id, pNumber);
 
     // pte valid, store or read and return
@@ -134,7 +134,7 @@ int MMU::recReq(const char OP, int id, int vAdd, int val)
     statusNewTranslation(id, vAdd / pSize, fFrame);
     return -1;
 }
-int MMU::getpNumber(int id, int vAdd) { return vAdd / pSize; }
+int MMU::getpNum(int id, int vAdd) { return vAdd / pSize; }
 int MMU::getPTE(int pid, int pNum) { return pStart[pid] + pNum; }
 int MMU::getOffset(int vAdd) { return vAdd % pSize; }
 int MMU::getGAdd(int pte) { return pte * pSize; }

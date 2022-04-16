@@ -30,7 +30,7 @@ public:
 public:
     void initMem();
     int recReq(const char OP, int id, int vAdd, int val); // receive read request from processes
-    int getpNumber(int id, int vAdd);                     // get page number from virtual address
+    int getpNum(int id, int vAdd);                        // get page number from virtual address
     int getPTE(int pid, int vAdd);                        // get index in page table entry
     int getOffset(int vAdd);                              // get offset in page
     int getGAdd(int pte);                                 // get global address
