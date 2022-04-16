@@ -53,24 +53,23 @@ void run(char *fileIn, char *fileOut)
     /* read memory size, page size from file. create processes
     and read their vMSize to get the disk size.
     create mmu, pass it to processes and start processes*/
-    std::ifstream infile(fileIn);
+    FILE *fIn = fopen(fileIn, "r");
     int mSize, pSize, nPro, dSize = 0;
-    infile >> mSize >> pSize >> nPro;
+    fscanf(fIn, "%d %d %d", &mSize, &pSize, &nPro);
 
-    std::string fileThread;
+    char fileThread[100];
     std::vector<Process *> processes;
     std::vector<int> pStart = {0};
     for (int i = 0; i < nPro; i++)
     {
-        infile >> fileThread;
-        fileThread = fileThread;
-        const char *fileThreadCh = (const char *)fileThread.c_str();
+        fscanf(fIn, "%s", fileThread);
+        const char *fileThreadCh = (const char *)fileThread;
         Process *p = new Process(i, fileThreadCh, pSize);
         dSize += p->vMSize;
         pStart.push_back(pStart[i] + p->vMSize / pSize);
         processes.push_back(p);
     }
-    infile.close();
+    fclose(fIn);
 
     MMU *mmu = new MMU(mSize, dSize, pSize, pStart, fileOut);
     start_processes(processes, mmu);
