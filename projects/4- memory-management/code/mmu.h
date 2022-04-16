@@ -1,6 +1,7 @@
 #ifndef MMU_H
 #define MMU_H
 #include <vector>
+#include "clock.h"
 
 class MMU
 {
@@ -23,10 +24,18 @@ public:
     char *mem;  // main memory
     char *disk; // disk
 
+    Clock *clock;
+
 public:
     void initMem();
     int recReq(const char OP, int id, int vAdd, int val); // receive read request from processes
-    void display();
+    int getpNumber(int id, int vAdd);                     // get page number from virtual address
+    int getPTE(int pid, int vAdd);                        // get index in page table entry
+    int getOffset(int vAdd);                              // get offset in page
+    int getGAdd(int pte);                                 // get global address
+    int read(int memAdd);                                 // read four bytes from valid memory address as integer (BE)
+    void write(int memAdd, int value);                    // write four bytes integer into valid memory address (BE)
+    int getFFrame();                                      // get first free frame
     ~MMU();
 };
 
