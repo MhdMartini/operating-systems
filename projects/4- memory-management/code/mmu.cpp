@@ -33,6 +33,9 @@ void MMU::initMem()
         memset(bitTable[i], 0, 3);
         fTable[i] = -1;
     }
+    // fill disk with random values
+    for (int i = 0; i < dSize; i++)
+        disk[i] = rand() % 255;
 }
 int MMU::recReq(const char OP, int id, int vAdd, int val)
 {
@@ -123,26 +126,17 @@ int MMU::getOffset(int vAdd) { return vAdd % pSize; }
 int MMU::getGAdd(int pte) { return pte * pSize; }
 int MMU::read(int memAdd)
 {
-    /* read four bytes from valid memory address as integer */
-    uint8_t temp;
-    int n = 0;
+    /* read four bytes from valid memory address as integer (Big Endian) */
+    int val = 0;
     for (int i = 0; i < INT_SIZE; i++)
-    {
-        temp = (uint8_t)mem[i];
-        n = (n << BYTE_SIZE) | temp;
-    }
-    return n;
+        val = (val << BYTE_SIZE) | (mem[memAdd + i] & 0xFF);
+    return val;
 }
 void MMU::write(int memAdd, int value)
 {
-    /* write four bytes integer into valid memory address (BE) */
-    int temp, n = 0;
-    for (int i = INT_SIZE - 1; i > -1; i--)
-    {
-        temp = value & 0x0000FF;
-        mem[i] = (char)temp;
-        value = value >> BYTE_SIZE;
-    }
+    /* write four bytes integer into valid memory address (Big Endian) */
+    for (int i = 0; i < INT_SIZE; i++)
+        mem[memAdd + i] = (value >> (BYTE_SIZE * (INT_SIZE - 1 - i))) & 0xFF;
 }
 int MMU::getFFrame()
 {
