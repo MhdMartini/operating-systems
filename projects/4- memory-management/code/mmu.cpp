@@ -13,11 +13,12 @@
 
 extern std::mutex lockFile, lockMMU, lockDisk, lockFault, lockAll;
 
-MMU::MMU(int mSize, int dSize, int pSize, std::vector<int> &pStart)
+MMU::MMU(int mSize, int dSize, int pSize, std::vector<int> &pStart, char *fileOut)
     : mSize(mSize), dSize(dSize), pSize(pSize), pStart(pStart)
 {
     initMem();
     clock = new Clock();
+    fOut = fopen(fileOut, "w");
 }
 void MMU::initMem()
 {
@@ -168,42 +169,44 @@ int MMU::getFFrame()
 void MMU::statusNotResident(int id, int pNum)
 {
     lockFile.lock();
-    printf("P%d: page %d not resident in memory\n", id, pNum);
+    fprintf(fOut, "P%d: page %d not resident in memory\n", id, pNum);
     lockFile.unlock();
 }
 void MMU::statusUsing(int id, int fNumber)
 {
     lockFile.lock();
-    printf("P%d: using free frame %d\n", id, fNumber);
+    fprintf(fOut, "P%d: using free frame %d\n", id, fNumber);
     lockFile.unlock();
 }
 void MMU::statusNewTranslation(int id, int pNum, int fNumber)
 {
     lockFile.lock();
-    printf("P%d: new translation from page %d to frame %d\n", id, pNum, fNumber);
+    fprintf(fOut, "P%d: new translation from page %d to frame %d\n", id, pNum, fNumber);
     lockFile.unlock();
 }
 void MMU::statusTranslated(int id, int vAdd, int memAdd)
 {
     lockFile.lock();
-    printf("P%d: translated VA 0x%08x to PA 0x%08x\n", id, vAdd, memAdd);
+    fprintf(fOut, "P%d: translated VA 0x%08x to PA 0x%08x\n", id, vAdd, memAdd);
     lockFile.unlock();
 }
 void MMU::statusValidTranslation(int id, int pNum, int fNumber)
 {
     lockFile.lock();
-    printf("P%d: valid translation from page %d to frame %d\n", id, pNum, fNumber);
+    fprintf(fOut, "P%d: valid translation from page %d to frame %d\n", id, pNum, fNumber);
     lockFile.unlock();
 }
 void MMU::statusEvicting(int id, int idV, int pNum, int fNumber)
 {
     lockFile.lock();
-    printf("P%d: evicting process %d, page %d from frame %d\n", id, idV, pNum, fNumber);
+    fprintf(fOut, "P%d: evicting process %d, page %d from frame %d\n", id, idV, pNum, fNumber);
     lockFile.unlock();
 }
 
 MMU::~MMU()
 {
+    fprintf(fOut, "Main: program completed");
+    fclose(fOut);
     delete[] mem;
     delete[] disk;
     for (int i = 0; i < nFrames; i++)

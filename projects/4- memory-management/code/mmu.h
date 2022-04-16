@@ -6,8 +6,9 @@
 class MMU
 {
 public:
-    MMU(int mSize, int dSize, int pSize, std::vector<int> &pStart);
+    MMU(int mSize, int dSize, int pSize, std::vector<int> &pStart, char *fileOut);
     std::vector<int> &pStart; // the start address in pages for each process
+    FILE *fOut;               // output file
 
 public:
     int pSize;   // page size

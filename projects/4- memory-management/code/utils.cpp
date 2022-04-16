@@ -48,12 +48,12 @@ void start_processes(std::vector<Process *> &processes, MMU *mmu)
         threads[i].join();
 }
 
-void run(char *fileName)
+void run(char *fileIn, char *fileOut)
 {
     /* read memory size, page size from file. create processes
     and read their vMSize to get the disk size.
     create mmu, pass it to processes and start processes*/
-    std::ifstream infile(fileName);
+    std::ifstream infile(fileIn);
     int mSize, pSize, nPro, dSize = 0;
     infile >> mSize >> pSize >> nPro;
 
@@ -72,7 +72,7 @@ void run(char *fileName)
     }
     infile.close();
 
-    MMU *mmu = new MMU(mSize, dSize, pSize, pStart);
+    MMU *mmu = new MMU(mSize, dSize, pSize, pStart, fileOut);
     start_processes(processes, mmu);
 
     for (int i = 0; i < processes.size(); i++)

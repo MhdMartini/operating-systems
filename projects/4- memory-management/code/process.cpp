@@ -53,14 +53,14 @@ void Process::senReq(const char OP, int regNum, int vAdd)
 void Process::statusStart()
 {
     lockFile.lock();
-    printf("Process %d: started\n", id);
+    fprintf(mmu->fOut, "Process %d: started\n", id);
     lockFile.unlock();
 }
 void Process::statusOp(const char OP, int regNum, int vAdd)
 {
     // P0 OPERATION: R r0 0
     lockFile.lock();
-    printf("Process %d OPERATION: %c r%d %d\n", id, OP, regNum, vAdd);
+    fprintf(mmu->fOut, "Process %d OPERATION: %c r%d %d\n", id, OP, regNum, vAdd);
     lockFile.unlock();
 }
 void Process::statusReq(const char OP, int regNum, int retVal, int vAdd)
@@ -68,15 +68,15 @@ void Process::statusReq(const char OP, int regNum, int retVal, int vAdd)
     // print read or write requests
     lockFile.lock();
     if (OP == 'R')
-        printf("P%d: r%d = 0x%.8X (mem at virtual addr 0x%.8X)\n", id, regNum, retVal, vAdd);
+        fprintf(mmu->fOut, "P%d: r%d = 0x%.8X (mem at virtual addr 0x%.8X)\n", id, regNum, retVal, vAdd);
     else
-        printf("P%d: mem at virtual addr 0x%.8X = 0x%.8X (r%d)\n", id, vAdd, retVal, regNum);
+        fprintf(mmu->fOut, "P%d: mem at virtual addr 0x%.8X = 0x%.8X (r%d)\n", id, vAdd, retVal, regNum);
     lockFile.unlock();
 }
 void Process::statusComplete()
 {
     lockFile.lock();
-    printf("Process %d complete\n", id);
+    fprintf(mmu->fOut, "Process %d complete\n", id);
     lockFile.unlock();
 }
 
