@@ -90,6 +90,8 @@ int MMU::recReq(const char OP, int id, int vAdd, int val)
             bitTable[pteVictim][REFERENCE] = false;
         }
 
+        statusEvicting(id, canVic->pid, canVic->pNumber, fTable[pteVictim]);
+
         // mark it invalid
         bitTable[pteVictim][VALID] = false;
 
@@ -191,6 +193,12 @@ void MMU::statusValidTranslation(int id, int pNum, int fNumber)
 {
     lockFault.lock();
     printf("P%d: valid translation from page %d to frame %d\n", id, pNum, fNumber);
+    lockFault.unlock();
+}
+void MMU::statusEvicting(int id, int idV, int pNum, int fNumber)
+{
+    lockFault.lock();
+    printf("P%d: evicting process %d, page %d from frame %d\n", id, idV, pNum, fNumber);
     lockFault.unlock();
 }
 

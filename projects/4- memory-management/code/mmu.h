@@ -41,11 +41,12 @@ public:
     int getFFrame();                                      // get first free frame
 
 public:
-    void statusNotResident(int id, int pNum);                   // print not resident status
-    void statusUsing(int id, int fNumber);                      // print using frame status
-    void statusNewTranslation(int id, int pNum, int fNumber);   // print new translation status
-    void statusTranslated(int id, int vAdd, int memAdd);        // print translated status
-    void statusValidTranslation(int id, int pNum, int fNumber); // print valid translation status
+    void statusNotResident(int id, int pNum);                    // print not resident status
+    void statusUsing(int id, int fNumber);                       // print using frame status
+    void statusNewTranslation(int id, int pNum, int fNumber);    // print new translation status
+    void statusTranslated(int id, int vAdd, int memAdd);         // print translated status
+    void statusValidTranslation(int id, int pNum, int fNumber);  // print valid translation status
+    void statusEvicting(int id, int idV, int pNum, int fNumber); // print evicting status
     ~MMU();
 };
 
