@@ -45,14 +45,7 @@ void start_processes(std::vector<Process *> &processes, MMU *mmu)
         threads.push_back(processes[i]->getThread());
     }
     for (int i = 0; i < threads.size(); i++)
-    {
         threads[i].join();
-    }
-    for (int i = 0; i < processes.size(); i++)
-    {
-        delete processes[i];
-    }
-    delete mmu;
 }
 
 void run(char *fileName)
@@ -66,6 +59,7 @@ void run(char *fileName)
 
     std::string fileThread;
     std::vector<Process *> processes;
+    std::vector<int> pStart = {0};
     for (int i = 0; i < nPro; i++)
     {
         infile >> fileThread;
@@ -73,10 +67,15 @@ void run(char *fileName)
         const char *fileThreadCh = (const char *)fileThread.c_str();
         Process *p = new Process(i, fileThreadCh, pSize);
         dSize += p->vMSize;
+        pStart.push_back(pStart[i] + p->vMSize / pSize);
         processes.push_back(p);
     }
     infile.close();
 
-    MMU *mmu = new MMU(mSize, dSize, pSize);
+    MMU *mmu = new MMU(mSize, dSize, pSize, pStart);
     start_processes(processes, mmu);
+
+    for (int i = 0; i < processes.size(); i++)
+        delete processes[i];
+    delete mmu;
 }

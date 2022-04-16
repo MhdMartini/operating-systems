@@ -15,8 +15,8 @@
 
 extern std::mutex lockFile, lockMMU, lockDisk, lockFault;
 
-MMU::MMU(int mSize, int dSize, int pSize)
-    : mSize(mSize), dSize(dSize), pSize(pSize)
+MMU::MMU(int mSize, int dSize, int pSize, std::vector<int> &pStart)
+    : mSize(mSize), dSize(dSize), pSize(pSize), pStart(pStart)
 {
     initMem();
     Clock *clock = new Clock();
@@ -37,9 +37,7 @@ void MMU::initMem()
 }
 int MMU::recReq(const char OP, int id, int vAdd, int val)
 {
-    // first time only for each process
-    if (pStart.size() == id + 1)
-        pStart.push_back(pStart[id] + pSize);
+    return 24;
 
     // get pte for requested address
     int pNumber = getpNumber(id, vAdd);

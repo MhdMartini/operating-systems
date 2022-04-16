@@ -6,9 +6,16 @@
 extern std::mutex lockFile, lockMMU;
 
 Process::Process(MMU *mmu, int id, std::string fileThread, int pSize)
-    : mmu(mmu), id(id), fileThread(fileThread), pSize(pSize) {}
+    : mmu(mmu), id(id), fileThread(fileThread), pSize(pSize) { init(); }
 Process::Process(int id, std::string fileThread, int pSize)
-    : id(id), fileThread(fileThread), pSize(pSize) {}
+    : id(id), fileThread(fileThread), pSize(pSize) { init(); }
+void Process::init()
+{
+    FILE *fp = fopen((const char *)fileThread.c_str(), "r");
+    fscanf(fp, "%d ", &vMSize);
+    nPages = vMSize / pSize;
+    fclose(fp);
+}
 
 void Process::start()
 {
@@ -16,7 +23,6 @@ void Process::start()
     statusStart();
     FILE *fp = fopen((const char *)fileThread.c_str(), "r");
     fscanf(fp, "%d ", &vMSize);
-    nPages = vMSize / pSize;
     while (!feof(fp))
     {
         int regNum, vAdd;
@@ -47,43 +53,30 @@ void Process::senReq(const char OP, int regNum, int vAdd)
 void Process::statusStart()
 {
     lockFile.lock();
-    std::cout << "Process " << id << " started" << std::endl;
+    printf("Process %d: started\n", id);
     lockFile.unlock();
 }
 void Process::statusOp(const char OP, int regNum, int vAdd)
 {
     // P0 OPERATION: R r0 0
     lockFile.lock();
-    std::cout << "Process " << id << " "
-              << "OPERATION: " << OP << " r" << regNum << " " << vAdd << std::endl;
+    printf("Process %d OPERATION: %c r%d %d\n", id, OP, regNum, vAdd);
     lockFile.unlock();
 }
 void Process::statusReq(const char OP, int regNum, int retVal, int vAdd)
 {
     // print read or write requests
     lockFile.lock();
-    std::cout << "P" << id << ": ";
     if (OP == 'R')
-    {
-        std::cout << "r" << regNum
-                  << " = 0x" << std::setfill('0') << std::setw(8) << std::hex << retVal << " ("
-                  << "mem at virtual addr 0x"
-                  << std::setfill('0') << std::setw(8) << std::hex
-                  << vAdd << ")" << std::endl;
-    }
+        printf("P%d: r%d = 0x%.8X (mem at virtual addr 0x%.8X)\n", id, regNum, retVal, vAdd);
     else
-    {
-        std::cout << "mem at virtual addr 0x"
-                  << std::setfill('0') << std::setw(8) << std::hex << vAdd
-                  << " = 0x" << std::setfill('0') << std::setw(8) << std::hex << retVal
-                  << " (r" << regNum << ")" << std::endl;
-    }
+        printf("P%d: mem at virtual addr 0x%.8X = 0x%.8X (r%d)\n", id, vAdd, retVal, regNum);
     lockFile.unlock();
 }
 void Process::statusComplete()
 {
     lockFile.lock();
-    std::cout << "Process " << id << " complete" << std::endl;
+    printf("Process %d complete\n", id);
     lockFile.unlock();
 }
 

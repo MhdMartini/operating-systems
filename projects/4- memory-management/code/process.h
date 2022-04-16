@@ -9,6 +9,7 @@ class Process
 public:
     Process(MMU *mmu, int id, std::string fileThread, int pSize);
     Process(int id, std::string fileThread, int pSize);
+    void init();
     MMU *mmu;                // send requests to this MMU
     int id;                  // process id
     std::string fileThread;  // file name of the thread

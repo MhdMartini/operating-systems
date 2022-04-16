@@ -6,8 +6,8 @@
 class MMU
 {
 public:
-    MMU(int mSize, int dSize, int pSize);
-    std::vector<int> pStart = {0}; // the start address in pages for each process
+    MMU(int mSize, int dSize, int pSize, std::vector<int> &pStart);
+    std::vector<int> &pStart; // the start address in pages for each process
 
 public:
     int pSize;   // page size
