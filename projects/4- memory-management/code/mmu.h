@@ -24,7 +24,7 @@ public:
     char *mem;  // main memory
     char *disk; // disk
 
-    Clock *clock;
+    Clock *clock; // clock algorithm
 
 public:
     void initMem();

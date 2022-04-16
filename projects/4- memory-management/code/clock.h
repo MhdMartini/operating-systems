@@ -14,9 +14,9 @@ class Clock
 {
 public:
     Clock();
-    Node *head;
-    Node *hand;
-    Node *tail;
+    Node *head = nullptr;
+    Node *hand = nullptr;
+    Node *tail = nullptr;
 
 public:
     void enque(int pid, int pNumber, int pte);   // enqueue a new node

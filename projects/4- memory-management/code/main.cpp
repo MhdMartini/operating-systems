@@ -2,15 +2,15 @@
 #include <stdlib.h>
 #include <iostream>
 #include <fstream>
-#include "utils.h"
 #include <mutex>
+#include "utils.h"
 
 #define LOG(x) std::cout << x << std::endl
 #define LOGH(x) std::cout << std::hex << x << std::endl
 
 using namespace std;
 
-std::mutex lockFile, lockMMU, lockDisk, lockFault;
+std::mutex lockFile, lockMMU, lockDisk, lockFault, lockAll;
 
 int main(int argc, char *argv[])
 {

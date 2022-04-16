@@ -1,11 +1,9 @@
 #include <stdio.h>
-#include <stdlib.h>
 #include <iostream>
 #include <thread>
 #include <mutex>
 #include <cstring>
 #include "mmu.h"
-#include "clock.h"
 
 #define VALID 0
 #define REFERENCE 1
@@ -13,13 +11,13 @@
 #define INT_SIZE 4
 #define BYTE_SIZE 8
 
-extern std::mutex lockFile, lockMMU, lockDisk, lockFault;
+extern std::mutex lockFile, lockMMU, lockDisk, lockFault, lockAll;
 
 MMU::MMU(int mSize, int dSize, int pSize, std::vector<int> &pStart)
     : mSize(mSize), dSize(dSize), pSize(pSize), pStart(pStart)
 {
     initMem();
-    Clock *clock = new Clock();
+    clock = new Clock();
 }
 void MMU::initMem()
 {
@@ -32,13 +30,13 @@ void MMU::initMem()
     {
         bitMap[i] = true;
         bitTable[i] = new bool[3];
+        memset(bitTable[i], 0, 3);
         fTable[i] = -1;
     }
 }
 int MMU::recReq(const char OP, int id, int vAdd, int val)
 {
-    return 24;
-
+    lockAll.lock();
     // get pte for requested address
     int pNumber = getpNumber(id, vAdd);
     int pte = getPTE(id, pNumber);
@@ -46,7 +44,6 @@ int MMU::recReq(const char OP, int id, int vAdd, int val)
     // pte valid, store or read and return
     if (bitTable[pte][VALID])
     {
-        lockMMU.lock();
         int fNum = fTable[pte];
         int offset = getOffset(vAdd);
         int memAdd = fNum * pSize + offset;
@@ -59,21 +56,18 @@ int MMU::recReq(const char OP, int id, int vAdd, int val)
             bitTable[pte][DIRTY] = true;
             write(memAdd, val);
         }
-        lockMMU.unlock();
+        lockAll.unlock();
         return val;
     }
 
     // invalid page, look for empty frame
-    lockMMU.lock();
     int fFrame = getFFrame();
-    lockMMU.unlock();
 
     // if no empty frame, step the clock until frame-to-evict is found
     if (fFrame == -1)
     {
         int pteVictim;
         Node *canVic;
-        lockFault.lock();
         while (1)
         {
             canVic = clock->step();
@@ -106,10 +100,22 @@ int MMU::recReq(const char OP, int id, int vAdd, int val)
         bitTable[pte][REFERENCE] = false;
         fTable[pte] = fFrame;
 
-        lockMMU.lock();
+        lockAll.unlock();
         return -1;
     }
-    return 0;
+
+    // free frame found, bring the page from disk to mem
+    int memAdd = fFrame * pSize;
+    int diskAdd = pte * pSize;
+    std::memcpy(mem + memAdd, disk + diskAdd, pSize);
+
+    // modify the new pte (set valid bit, enqueue clock node, store frame number)
+    bitTable[pte][VALID] = true;
+    fTable[pte] = fFrame;
+    clock->enque(id, pNumber, pte);
+
+    lockAll.unlock();
+    return -1;
 }
 int MMU::getpNumber(int id, int vAdd) { return vAdd / pSize; }
 int MMU::getPTE(int pid, int pNum) { return pStart[pid] + pNum; }
@@ -142,8 +148,13 @@ int MMU::getFFrame()
 {
     /* get first free frame */
     for (int i = 0; i < nFrames; i++)
+    {
         if (bitMap[i])
+        {
+            bitMap[i] = false;
             return i;
+        }
+    }
     return -1;
 }
 
