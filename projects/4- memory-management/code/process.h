@@ -7,12 +7,14 @@
 class Process
 {
 public:
-    Process(MMU *mmu, int id, std::string fileThread, int pSize);
-    Process(int id, std::string fileThread, int pSize);
+    Process(MMU *mmu, int id, const char *fileThread, int pSize);
+    Process(int id, const char *fileThread, int pSize);
+    FILE *fIn; // pointer to input file
     void init();
+
+public:
     MMU *mmu;                // send requests to this MMU
     int id;                  // process id
-    std::string fileThread;  // file name of the thread
     int pSize;               // page size
     int vMSize;              // virtual memory size
     int nPages;              // number of pages

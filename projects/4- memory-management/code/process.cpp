@@ -5,33 +5,31 @@
 
 extern std::mutex lockFile, lockMMU;
 
-Process::Process(MMU *mmu, int id, std::string fileThread, int pSize)
-    : mmu(mmu), id(id), fileThread(fileThread), pSize(pSize) { init(); }
-Process::Process(int id, std::string fileThread, int pSize)
-    : id(id), fileThread(fileThread), pSize(pSize) { init(); }
+Process::Process(int id, const char *fileThread, int pSize)
+    : id(id), pSize(pSize)
+{
+    fIn = fopen(fileThread, "r");
+    init();
+}
 void Process::init()
 {
-    FILE *fp = fopen((const char *)fileThread.c_str(), "r");
-    fscanf(fp, "%d ", &vMSize);
+    fscanf(fIn, "%d ", &vMSize);
     nPages = vMSize / pSize;
-    fclose(fp);
 }
 
 void Process::start()
 {
     /* parse thread file to decide number of pages and send requests*/
     statusStart();
-    FILE *fp = fopen((const char *)fileThread.c_str(), "r");
-    fscanf(fp, "%d ", &vMSize);
-    while (!feof(fp))
+    while (!feof(fIn))
     {
         int regNum, vAdd;
         char OP, _;
-        fscanf(fp, "%c %c%d %d ", &OP, &_, &regNum, &vAdd);
+        fscanf(fIn, "%c %c%d %d ", &OP, &_, &regNum, &vAdd);
         statusOp(OP, regNum, vAdd);
         senReq(OP, regNum, vAdd);
     }
-    fclose(fp);
+    fclose(fIn);
     statusComplete();
 }
 std::thread Process::getThread()
