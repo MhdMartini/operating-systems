@@ -9,6 +9,7 @@ public:
     MMU(int mSize, int dSize, int pSize, std::vector<int> &pStart, char *fileOut);
     std::vector<int> &pStart; // the start address in pages for each process
     FILE *fOut;               // output file
+    Clock *clock;             // clock algorithm
 
 public:
     int pSize;   // page size
@@ -20,12 +21,8 @@ public:
     bool *bitMap;    // which main memory frames are free
     bool **bitTable; // valid, reference, and dirty bits for pages
     int *fTable;     // frame number, indexed by page number
-
-public:
-    char *mem;  // main memory
-    char *disk; // disk
-
-    Clock *clock; // clock algorithm
+    char *mem;       // main memory
+    char *disk;      // disk
 
 public:
     bool rejected = false;
@@ -40,15 +37,15 @@ public:
     int read(int memAdd);                                 // read four bytes from valid memory address as integer (BE)
     void write(int memAdd, int value);                    // write four bytes integer into valid memory address (BE)
     int getFFrame();                                      // get first free frame
+    ~MMU();
 
-public:
+private:
     void statusNotResident(int id, int pNum);                    // print not resident status
     void statusUsing(int id, int fNumber);                       // print using frame status
     void statusNewTranslation(int id, int pNum, int fNumber);    // print new translation status
     void statusTranslated(int id, int vAdd, int memAdd);         // print translated status
     void statusValidTranslation(int id, int pNum, int fNumber);  // print valid translation status
     void statusEvicting(int id, int idV, int pNum, int fNumber); // print evicting status
-    ~MMU();
 };
 
 #endif
