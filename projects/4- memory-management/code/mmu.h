@@ -15,7 +15,8 @@ public:
     int pSize;   // page size
     int mSize;   // main memory size
     int dSize;   // disk size
-    int nFrames; // number of pages
+    int nFrames; // number of frames
+    int nPages;  // number of pages
 
 public:
     bool *bitMap;    // which main memory frames are free
@@ -30,7 +31,7 @@ public:
 public:
     void initMem();
     int recReq(const char OP, int id, int vAdd, int val); // receive read request from processes
-    int getpNum(int id, int vAdd);                        // get page number from virtual address
+    int getpNum(int vAdd);                                // get page number from virtual address
     int getPTE(int pid, int vAdd);                        // get index in page table entry
     int getOffset(int vAdd);                              // get offset in page
     int getGAdd(int pte);                                 // get global address

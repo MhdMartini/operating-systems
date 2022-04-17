@@ -16,6 +16,8 @@ extern std::mutex lockFile, lockMMU, lockDisk, lockFault, lockAll;
 MMU::MMU(int mSize, int dSize, int pSize, std::vector<int> &pStart, char *fileOut)
     : mSize(mSize), dSize(dSize), pSize(pSize), pStart(pStart)
 {
+    nFrames = mSize / pSize;
+    nPages = pStart[pStart.size() - 1];
     initMem();
     clock = new Clock();
     fOut = fopen(fileOut, "w");
@@ -23,27 +25,30 @@ MMU::MMU(int mSize, int dSize, int pSize, std::vector<int> &pStart, char *fileOu
 void MMU::initMem()
 {
     mem = new char[mSize];
+
     disk = new char[dSize];
-    bitMap = new bool[nFrames];
-    bitTable = new bool *[nFrames];
-    fTable = new int[nFrames];
-    for (int i = 0; i < nFrames; i++)
-    {
-        bitMap[i] = true;
-        bitTable[i] = new bool[3];
-        memset(bitTable[i], 0, 3);
-        fTable[i] = -1;
-    }
-    // fill disk with random values
     for (int i = 0; i < dSize; i++)
-        disk[i] = rand() % 255;
+        disk[i] = (uint8_t)(rand() % 255);
+
+    bitMap = new bool[nFrames];
+    for (int i = 0; i < nFrames; i++)
+        bitMap[i] = true;
+
+    bitTable = new bool *[nPages];
+    for (int i = 0; i < nPages; i++)
+    {
+        bitTable[i] = new bool[3];
+        for (int j = 0; j < 3; j++)
+            bitTable[i][j] = false;
+    }
+    fTable = new int[nPages];
 }
 int MMU::recReq(const char OP, int id, int vAdd, int val)
 {
     lockAll.lock();
     // get pte for requested address
-    int pNumber = getpNum(id, vAdd);
-    int pte = getPTE(id, pNumber);
+    int pNumber = vAdd / pSize;
+    int pte = pStart[id] + pNumber;
 
     // pte valid, store or read and return
     if (bitTable[pte][VALID])
@@ -134,7 +139,7 @@ int MMU::recReq(const char OP, int id, int vAdd, int val)
     statusNewTranslation(id, vAdd / pSize, fFrame);
     return -1;
 }
-int MMU::getpNum(int id, int vAdd) { return vAdd / pSize; }
+int MMU::getpNum(int vAdd) { return vAdd / pSize; }
 int MMU::getPTE(int pid, int pNum) { return pStart[pid] + pNum; }
 int MMU::getOffset(int vAdd) { return vAdd % pSize; }
 int MMU::getGAdd(int pte) { return pte * pSize; }
@@ -157,7 +162,7 @@ int MMU::getFFrame()
     /* get first free frame */
     for (int i = 0; i < nFrames; i++)
     {
-        if (bitMap[i])
+        if (bitMap[i] == true)
         {
             bitMap[i] = false;
             return i;
