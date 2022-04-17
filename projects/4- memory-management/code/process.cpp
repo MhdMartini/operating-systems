@@ -58,7 +58,7 @@ void Process::statusOp(const char OP, int regNum, int vAdd)
 {
     // P0 OPERATION: R r0 0
     lockFile.lock();
-    fprintf(mmu->fOut, "Process %d OPERATION: %c r%d %d\n", id, OP, regNum, vAdd);
+    fprintf(mmu->fOut, "P%d OPERATION: %c r%d %d\n", id, OP, regNum, vAdd);
     lockFile.unlock();
 }
 void Process::statusReq(const char OP, int regNum, int retVal, int vAdd)
