@@ -11,7 +11,7 @@
 #define INT_SIZE 4
 #define BYTE_SIZE 8
 
-extern std::mutex lockFile, lockMMU, lockDisk, lockFault, lockAll;
+extern std::mutex lockFile, lockAll;
 
 MMU::MMU(int mSize, int dSize, int pSize, std::vector<int> &pStart, char *fileOut)
     : mSize(mSize), dSize(dSize), pSize(pSize), pStart(pStart)
@@ -210,7 +210,7 @@ void MMU::statusEvicting(int id, int idV, int pNum, int fNumber)
 
 MMU::~MMU()
 {
-    fprintf(fOut, "Main: program completed");
+    fprintf(fOut, "Main: program completed\n");
     fclose(fOut);
     delete[] mem;
     delete[] disk;

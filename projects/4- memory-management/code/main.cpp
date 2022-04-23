@@ -10,7 +10,7 @@
 
 using namespace std;
 
-std::mutex lockFile, lockMMU, lockDisk, lockFault, lockAll;
+std::mutex lockFile, lockAll;
 
 int main(int argc, char *argv[])
 {

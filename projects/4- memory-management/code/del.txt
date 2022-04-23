@@ -43,11 +43,11 @@ P0 OPERATION: R r9 1016
 P0: valid translation from page 31 to frame 1
 P0: translated VA 0x000003f8 to PA 0x00000038
 P0: r9 = 0x89E34A2A (mem at virtual addr 0x000003F8)
+Process 0 complete
 Process 1: started
 P1 OPERATION: R r0 0
 P1: page 0 not resident in memory
 P1: using free frame 2
-Process 0 complete
 P1: new translation from page 0 to frame 2
 P1: translated VA 0x00000000 to PA 0x00000040
 P1: r0 = 0x0681F50D (mem at virtual addr 0x00000000)
